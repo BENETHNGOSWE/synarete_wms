@@ -1,0 +1,128 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:WMA-{YYYY}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "source_accountability",
+    "target_material_issue",
+    "target_material_issue_item",
+    "engineer",
+    "site",
+    "item_code",
+    "quantity",
+    "allocation_date",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "source_accountability",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Source Accountability",
+      "options": "WMS Material Accountability",
+      "reqd": 1
+    },
+    {
+      "fieldname": "target_material_issue",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Target Material Issue",
+      "options": "WMS Material Issue",
+      "reqd": 1
+    },
+    {
+      "fieldname": "target_material_issue_item",
+      "fieldtype": "Data",
+      "label": "Target Material Issue Item",
+      "read_only": 1
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Engineer",
+      "options": "Employee",
+      "reqd": 1
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Site",
+      "options": "WMS Site",
+      "reqd": 1
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "quantity",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity Reallocated",
+      "reqd": 1
+    },
+    {
+      "default": "Today",
+      "fieldname": "allocation_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Allocation Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "WMS Material Allocation",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "report": 1
+    }
+  ],
+  "sort_field": "allocation_date",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

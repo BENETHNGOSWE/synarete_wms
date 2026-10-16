@@ -1,0 +1,214 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:WMA-{YYYY}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "material_issue",
+    "material_issue_item",
+    "site_work_order",
+    "site",
+    "engineer",
+    "item_code",
+    "requested_qty",
+    "approved_qty",
+    "issued_qty",
+    "carried_forward_qty",
+    "transferred_out_qty",
+    "consumed_qty",
+    "returned_qty",
+    "outstanding_qty",
+    "accountability_status",
+    "last_consumption",
+    "last_return",
+    "last_allocation"
+  ],
+  "fields": [
+    {
+      "fieldname": "material_issue",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Material Issue",
+      "options": "WMS Material Issue",
+      "reqd": 1
+    },
+    {
+      "fieldname": "material_issue_item",
+      "fieldtype": "Data",
+      "label": "Material Issue Item Row",
+      "read_only": 1
+    },
+    {
+      "fieldname": "site_work_order",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Site Work Order",
+      "options": "Site Work Order"
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Site",
+      "options": "WMS Site",
+      "reqd": 1
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Engineer",
+      "options": "Employee",
+      "reqd": 1
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "requested_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Requested Quantity",
+      "read_only": 1
+    },
+    {
+      "fieldname": "approved_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Approved Quantity",
+      "read_only": 1
+    },
+    {
+      "fieldname": "issued_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Issued Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "carried_forward_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Carried Forward Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "transferred_out_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Reallocated Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "consumed_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Consumed Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "returned_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Returned Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "outstanding_qty",
+      "fieldtype": "Float",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Outstanding Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "Awaiting Consumption",
+      "fieldname": "accountability_status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Accountability Status",
+      "options": "Awaiting Consumption\nPartially Accounted\nFully Accounted\nOutstanding",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_consumption",
+      "fieldtype": "Link",
+      "label": "Last Consumption",
+      "options": "WMS Material Consumption",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_return",
+      "fieldtype": "Link",
+      "label": "Last Return",
+      "options": "Material Return Record",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_allocation",
+      "fieldtype": "Link",
+      "label": "Last Allocation",
+      "options": "WMS Material Allocation",
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "WMS Material Accountability",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "report": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

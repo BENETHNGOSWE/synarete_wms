@@ -1,0 +1,138 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "company_section",
+    "company",
+    "warehouse_section",
+    "main_warehouse",
+    "field_issued_warehouse",
+    "internal_delivery_customer",
+    "htt_section",
+    "htt_tracking_mode",
+    "htt_overdue_days",
+    "role_section",
+    "stock_manager_role",
+    "stock_user_role"
+  ],
+  "fields": [
+    {
+      "fieldname": "company_section",
+      "fieldtype": "Section Break",
+      "label": "Company"
+    },
+    {
+      "fieldname": "company",
+      "fieldtype": "Link",
+      "label": "Company",
+      "options": "Company",
+      "reqd": 1
+    },
+    {
+      "fieldname": "warehouse_section",
+      "fieldtype": "Section Break",
+      "label": "Stock Locations"
+    },
+    {
+      "description": "Physical warehouse where Synarete-owned stock is received.",
+      "fieldname": "main_warehouse",
+      "fieldtype": "Link",
+      "label": "Main Warehouse",
+      "options": "Warehouse",
+      "reqd": 1
+    },
+    {
+      "description": "Virtual warehouse used to keep the standard stock ledger accurate after stock is issued to a site or engineer.",
+      "fieldname": "field_issued_warehouse",
+      "fieldtype": "Link",
+      "label": "Field Issued Warehouse",
+      "options": "Warehouse",
+      "reqd": 1
+    },
+    {
+      "description": "Generic Customer used on a draft printable Delivery Note for internal site issues. The WMS Material Issue remains the stock transaction.",
+      "fieldname": "internal_delivery_customer",
+      "fieldtype": "Link",
+      "label": "Internal Delivery Customer",
+      "options": "Customer"
+    },
+    {
+      "fieldname": "htt_section",
+      "fieldtype": "Section Break",
+      "label": "HTT Materials"
+    },
+    {
+      "default": "Custom Ledger",
+      "fieldname": "htt_tracking_mode",
+      "fieldtype": "Select",
+      "label": "HTT Tracking Mode",
+      "options": "Custom Ledger\nSeparate Warehouse\nNo Stock Ledger"
+    },
+    {
+      "default": "7",
+      "fieldname": "htt_overdue_days",
+      "fieldtype": "Int",
+      "label": "HTT Overdue Days"
+    },
+    {
+      "fieldname": "role_section",
+      "fieldtype": "Section Break",
+      "label": "Roles"
+    },
+    {
+      "default": "Stock Manager",
+      "fieldname": "stock_manager_role",
+      "fieldtype": "Data",
+      "label": "Stock Manager Role",
+      "read_only": 1
+    },
+    {
+      "default": "Stock User",
+      "fieldname": "stock_user_role",
+      "fieldtype": "Data",
+      "label": "Stock User Role",
+      "read_only": 1
+    }
+  ],
+  "issingle": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "WMS Settings",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1
+    },
+    {
+      "role": "WMS Engineer",
+      "read": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

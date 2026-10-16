@@ -1,0 +1,1 @@
+from .wms_material_consumption_report import execute

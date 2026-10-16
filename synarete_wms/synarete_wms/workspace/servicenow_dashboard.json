@@ -1,0 +1,34 @@
+{
+  "doctype": "Workspace",
+  "name": "ServiceNow Dashboard",
+  "title": "ServiceNow Dashboard",
+  "label": "ServiceNow Dashboard",
+  "module": "Synarete WMS",
+  "icon": "dashboard",
+  "public": 1,
+  "is_hidden": 0,
+  "shortcuts": [
+    {
+      "label": "Open Dashboard",
+      "link_to": "snwo-overview",
+      "type": "Page",
+      "icon": "dashboard"
+    },
+    {
+      "label": "ServiceNow Site Work Order",
+      "link_to": "ServiceNow Site Work Order",
+      "type": "DocType"
+    },
+    {
+      "label": "SNWO Material Traceability",
+      "link_to": "SNWO Material Traceability",
+      "type": "Report"
+    },
+    {
+      "label": "SNWO MP Material Report",
+      "link_to": "SNWO MP Material Report",
+      "type": "Report"
+    }
+  ],
+  "content": "[{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>ServiceNow</b></span>\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Dashboard\",\"col\":4}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"ServiceNow Site Work Order\",\"col\":4}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SNWO Material Traceability\",\"col\":4}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SNWO MP Material Report\",\"col\":4}}]"
+}

@@ -1,0 +1,1 @@
+from synarete_wms.synarete_wms.report.wms_stock_taking_report.wms_stock_taking_report import execute

@@ -1,0 +1,164 @@
+{
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "item_code",
+    "item_name",
+    "material_issue_item",
+    "accountability",
+    "material_type",
+    "requested_qty",
+    "issued_qty",
+    "carried_forward_qty",
+    "transferred_out_qty",
+    "previous_consumed_qty",
+    "previous_returned_qty",
+    "consumed_qty",
+    "returned_qty",
+    "available_outstanding_qty",
+    "outstanding_qty",
+    "qty",
+    "uom",
+    "serial_no",
+    "remarks"
+  ],
+  "fields": [
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "material_issue_item",
+      "fieldtype": "Link",
+      "label": "Material Issue Item",
+      "options": "WMS Material Issue Item",
+      "read_only": 1
+    },
+    {
+      "fieldname": "accountability",
+      "fieldtype": "Link",
+      "label": "Material Accountability",
+      "options": "WMS Material Accountability",
+      "read_only": 1
+    },
+    {
+      "fieldname": "material_type",
+      "fieldtype": "Select",
+      "label": "Material Type",
+      "options": "\nMP\nHTT",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "requested_qty",
+      "fieldtype": "Float",
+      "label": "Requested Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "issued_qty", 
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Issued Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "carried_forward_qty",
+      "fieldtype": "Float",
+      "label": "Carried Forward Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "transferred_out_qty",
+      "fieldtype": "Float",
+      "label": "Reallocated Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "previous_consumed_qty",
+      "fieldtype": "Float",
+      "label": "Previously Consumed",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "previous_returned_qty",
+      "fieldtype": "Float",
+      "label": "Previously Returned",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "consumed_qty",
+      "fieldtype": "Float",
+      "label": "Total Consumed Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "returned_qty",
+      "fieldtype": "Float",
+      "label": "Total Returned Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "available_outstanding_qty",
+      "fieldtype": "Float",
+      "label": "Outstanding Before This Consumption",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "outstanding_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Outstanding Quantity",
+      "read_only": 1
+    },
+    {
+      "fieldname": "qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "New Consumed Quantity",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "fieldname": "serial_no",
+      "fieldtype": "Small Text",
+      "label": "Serial No"
+    },
+    {
+      "fieldname": "remarks",
+      "fieldtype": "Small Text",
+      "label": "Remarks"
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "WMS Material Consumption Item"
+}

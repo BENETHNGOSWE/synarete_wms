@@ -1,0 +1,66 @@
+{
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "fields": [
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Required Quantity",
+      "reqd": 1
+    },
+    {
+      "fieldname": "approved_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Approved Quantity"
+    },
+    {
+      "fetch_from": "item_code.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "fieldname": "source_warehouse",
+      "fieldtype": "Link",
+      "label": "Source Warehouse",
+      "options": "Warehouse",
+      "reqd": 1
+    },
+    {
+      "fieldname": "material_type",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Material Type",
+      "options": "\nMP\nHTT"
+    },
+    {
+      "fieldname": "remarks",
+      "fieldtype": "Small Text",
+      "label": "Remarks"
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "Site Work Order Item"
+}

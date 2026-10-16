@@ -1,0 +1,65 @@
+{
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "fields": [
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity",
+      "reqd": 1
+    },
+    {
+      "fieldname": "dispatched_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Dispatched Quantity",
+      "read_only": 1
+    },
+    {
+      "fetch_from": "item_code.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "fieldname": "serial_no",
+      "fieldtype": "Small Text",
+      "label": "Serial No"
+    },
+    {
+      "fieldname": "condition",
+      "fieldtype": "Select",
+      "label": "Condition",
+      "options": "New\nUsed - Good\nUsed - Damaged\nFor Repair"
+    },
+    {
+      "default": "N/A",
+      "fieldname": "return_status",
+      "fieldtype": "Select",
+      "label": "Return Status",
+      "options": "N/A\nPending Return\nReturned\nLost\nDisposed\nCustomer Returned"
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "HTT Material Item"
+}

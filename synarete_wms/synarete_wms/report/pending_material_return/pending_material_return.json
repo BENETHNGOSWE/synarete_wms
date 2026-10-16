@@ -1,0 +1,44 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "label": "Engineer",
+      "options": "Employee"
+    },
+    {
+      "fieldname": "material_type",
+      "fieldtype": "Select",
+      "label": "Material Type",
+      "options": "\nMP\nHTT"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "Pending Material Return",
+  "ref_doctype": "Material Return Record",
+  "report_name": "Pending Material Return",
+  "report_type": "Script Report",
+  "roles": [
+    {
+      "role": "Stock Manager"
+    },
+    {
+      "role": "Warehouse Manager"
+    },
+    {
+      "role": "WMS Viewer"
+    },
+    {
+      "role": "System Manager"
+    }
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

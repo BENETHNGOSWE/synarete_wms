@@ -1,0 +1,34 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "from_date",
+      "fieldtype": "Date",
+      "label": "From Date"
+    },
+    {
+      "fieldname": "to_date",
+      "fieldtype": "Date",
+      "label": "To Date"
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "label": "Item",
+      "options": "Item"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "SNWO Interchange Report",
+  "ref_doctype": "SNWO Material Transaction",
+  "report_name": "SNWO Interchange Report",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

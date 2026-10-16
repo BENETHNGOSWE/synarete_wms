@@ -1,0 +1,18 @@
+{
+  "content": null,
+  "creation": "2026-09-04 00:00:00.000000",
+  "doctype": "Page",
+  "module": "Synarete WMS",
+  "name": "snwo-overview",
+  "page_name": "snwo-overview",
+  "roles": [
+    {"role": "System Manager"},
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "Stock User"}
+  ],
+  "standard": "Yes",
+  "system_page": 0,
+  "title": "ServiceNow Dashboard"
+}

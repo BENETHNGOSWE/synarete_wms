@@ -1,0 +1,141 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:WCT-{YYYY}-{#####}",
+  "creation": "2026-10-13 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "source_engineer",
+    "target_engineer",
+    "source_accountability",
+    "item_code",
+    "qty",
+    "site",
+    "transfer_date",
+    "status",
+    "notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "source_engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "From Engineer",
+      "options": "Employee",
+      "reqd": 1
+    },
+    {
+      "fieldname": "target_engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "To Engineer",
+      "options": "Employee",
+      "reqd": 1
+    },
+    {
+      "fieldname": "source_accountability",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Source Accountability",
+      "options": "WMS Material Accountability",
+      "reqd": 1
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity",
+      "reqd": 1
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "label": "Target Site",
+      "options": "WMS Site"
+    },
+    {
+      "default": "Today",
+      "fieldname": "transfer_date",
+      "fieldtype": "Date",
+      "label": "Transfer Date",
+      "reqd": 1
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Draft\nTransferred\nCancelled",
+      "read_only": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "no_copy": 1,
+      "options": "WMS Custodian Transfer",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "module": "Synarete WMS",
+  "name": "WMS Custodian Transfer",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "report": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

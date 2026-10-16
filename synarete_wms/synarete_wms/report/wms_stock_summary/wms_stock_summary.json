@@ -1,0 +1,39 @@
+{
+  "add_total_row": 1,
+  "columns": [],
+  "filters": [
+    {
+      "fieldname": "warehouse",
+      "fieldtype": "Link",
+      "label": "Warehouse",
+      "options": "Warehouse"
+    },
+    {
+      "fieldname": "material_category",
+      "fieldtype": "Select",
+      "label": "Material Category",
+      "options": "\nMP\nHTT\nConsumable\nSpare Part\nTool"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "WMS Stock Summary",
+  "ref_doctype": "Item",
+  "report_name": "WMS Stock Summary",
+  "report_type": "Script Report",
+  "roles": [
+    {
+      "role": "Stock Manager"
+    },
+    {
+      "role": "Warehouse Manager"
+    },
+    {
+      "role": "WMS Viewer"
+    },
+    {
+      "role": "System Manager"
+    }
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

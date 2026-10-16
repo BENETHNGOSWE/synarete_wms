@@ -1,0 +1,1 @@
+from synarete_wms.synarete_wms.report.wms_asset_movement_report.wms_asset_movement_report import execute

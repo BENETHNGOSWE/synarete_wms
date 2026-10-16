@@ -1,0 +1,252 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:SWO-{YYYY}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "title",
+    "site",
+    "work_type",
+    "engineer",
+    "requested_by",
+    "requested_on",
+    "planned_date",
+    "material_type",
+    "status",
+    "outstanding_material_notice",
+    "description",
+    "materials_section",
+    "materials",
+    "review_section",
+    "reviewed_by",
+    "review_date",
+    "review_notes",
+    "material_issue",
+    "completion_section",
+    "completion_date",
+    "completion_notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "title",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Title",
+      "reqd": 1
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Site",
+      "options": "WMS Site",
+      "reqd": 1
+    },
+    {
+      "fieldname": "work_type",
+      "fieldtype": "Select",
+      "label": "Work Type",
+      "options": "Preventive Maintenance\nCorrective Maintenance\nNew Installation\nUpgrade\nInspection",
+      "reqd": 1
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Engineer",
+      "options": "Employee",
+      "reqd": 1
+    },
+    {
+      "default": "__user",
+      "fieldname": "requested_by",
+      "fieldtype": "Link",
+      "label": "Requested By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "default": "Today",
+      "fieldname": "requested_on",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Requested On",
+      "read_only": 1
+    },
+    {
+      "fieldname": "planned_date",
+      "fieldtype": "Date",
+      "label": "Planned Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "material_type",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Material Type",
+      "options": "MP\nHTT\nBoth",
+      "reqd": 1
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nPending Stock Review\nApproved\nRejected\nIssued\nIn Progress\nCompleted\nCancelled",
+      "read_only": 1
+    },
+    {
+      "depends_on": "eval:doc.outstanding_material_notice",
+      "fieldname": "outstanding_material_notice",
+      "fieldtype": "Small Text",
+      "label": "Outstanding Material Warning (submission allowed)",
+      "read_only": 1
+    },
+    {
+      "fieldname": "description", 
+      "fieldtype": "Text Editor",
+      "label": "Description"
+    },
+    {
+      "fieldname": "materials_section",
+      "fieldtype": "Section Break",
+      "label": "Required Materials"
+    },
+    {
+      "fieldname": "materials",
+      "fieldtype": "Table",
+      "label": "Materials",
+      "options": "Site Work Order Item"
+    },
+    {
+      "fieldname": "review_section",
+      "fieldtype": "Section Break",
+      "label": "Stock Manager Review"
+    },
+    {
+      "fieldname": "reviewed_by",
+      "fieldtype": "Link",
+      "label": "Reviewed By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "review_date",
+      "fieldtype": "Date",
+      "label": "Review Date",
+      "read_only": 1
+    },
+    {
+      "fieldname": "review_notes",
+      "fieldtype": "Small Text",
+      "label": "Review Notes"
+    },
+    {
+      "fieldname": "material_issue",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Material Issue",
+      "options": "WMS Material Issue",
+      "read_only": 1
+    },
+    {
+      "fieldname": "completion_section",
+      "fieldtype": "Section Break",
+      "label": "Completion"
+    },
+    {
+      "fieldname": "completion_date",
+      "fieldtype": "Date",
+      "label": "Completion Date"
+    },
+    {
+      "fieldname": "completion_notes",
+      "fieldtype": "Small Text",
+      "label": "Completion Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "Site Work Order",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "Site Work Order",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "import": 1,
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "print": 1
+    },
+    {
+      "role": "WMS Viewer",
+      "read": 1,
+      "report": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "print": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "title_field": "title",
+  "track_changes": 1
+}

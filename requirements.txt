@@ -1,0 +1,3 @@
+# Keep the initial app dependency-free.
+# Add third-party packages only when the feature using them is implemented,
+# tested locally, and included in the production image build process.

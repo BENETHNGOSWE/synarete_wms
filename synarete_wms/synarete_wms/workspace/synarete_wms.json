@@ -1,0 +1,10 @@
+{
+  "doctype": "Workspace",
+  "name": "Synarete WMS",
+  "title": "Synarete WMS",
+  "label": "Synarete WMS",
+  "module": "Synarete WMS",
+  "icon": "package",
+  "public": 1,
+  "content": "[{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Warehouse Operations</b></span>\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WMS Site\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Site Work Order\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WMS Material Issue\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"HTT Material Receipt\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engineer Consignment\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Taking Entry\",\"col\":3}},{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>ServiceNow Work Orders</b></span>\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"ServiceNow Site Work Order\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SNWO Material Transaction\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Maintenance Partner\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WMS Stock Summary\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending Material Return\",\"col\":3}}]"
+}

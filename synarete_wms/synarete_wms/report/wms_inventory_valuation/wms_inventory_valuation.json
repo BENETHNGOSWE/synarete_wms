@@ -1,0 +1,19 @@
+{
+  "add_total_row": 1,
+  "doctype": "Report",
+  "filters": [
+    {"fieldname": "warehouse", "fieldtype": "Link", "label": "Warehouse", "options": "Warehouse"}
+  ],
+  "is_standard": "Yes",
+  "module": "Synarete WMS",
+  "name": "WMS Inventory Valuation",
+  "ref_doctype": "Bin",
+  "report_name": "WMS Inventory Valuation",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ]
+}

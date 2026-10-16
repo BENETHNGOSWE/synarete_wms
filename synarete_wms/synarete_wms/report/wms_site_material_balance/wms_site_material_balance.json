@@ -1,0 +1,22 @@
+{
+  "add_total_row": 1,
+  "doctype": "Report",
+  "filters": [
+    {"fieldname": "site", "fieldtype": "Link", "label": "Site", "options": "WMS Site"},
+    {"fieldname": "engineer", "fieldtype": "Link", "label": "Engineer", "options": "Employee"},
+    {"fieldname": "item_code", "fieldtype": "Link", "label": "Item", "options": "Item"},
+    {"fieldname": "include_fully_accounted", "fieldtype": "Check", "label": "Include Fully Accounted"}
+  ],
+  "is_standard": "Yes",
+  "module": "Synarete WMS",
+  "name": "WMS Site Material Balance",
+  "ref_doctype": "WMS Material Accountability",
+  "report_name": "WMS Site Material Balance",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ]
+}

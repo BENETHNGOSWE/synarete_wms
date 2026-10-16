@@ -1,0 +1,132 @@
+{
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "item_code",
+    "part_name",
+    "part_category",
+    "part_group",
+    "material_source",
+    "qty_requested",
+    "qty_received",
+    "qty_issued",
+    "qty_consumed",
+    "qty_remaining",
+    "qty_warehouse_remaining",
+    "qty_interchanged_out",
+    "qty_interchanged_in",
+    "qty_mp_issued",
+    "uom"
+  ],
+  "fields": [
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item"
+    },
+    {
+      "fieldname": "part_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Part Name"
+    },
+    {
+      "fieldname": "part_category",
+      "fieldtype": "Data",
+      "label": "Part Category"
+    },
+    {
+      "fieldname": "part_group",
+      "fieldtype": "Data",
+      "label": "Part Group"
+    },
+    {
+      "default": "ServiceNow Request",
+      "fieldname": "material_source",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Material Source",
+      "options": "ServiceNow Request\nMP Stock"
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_requested",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Qty Requested"
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_received",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Qty Received",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_issued",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Qty Issued",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_consumed",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Qty Consumed",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_remaining",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Qty Remaining",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_warehouse_remaining",
+      "fieldtype": "Float",
+      "label": "Qty Remaining in Warehouse",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_interchanged_out",
+      "fieldtype": "Float",
+      "label": "Qty Interchanged Out",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_interchanged_in",
+      "fieldtype": "Float",
+      "label": "Qty Interchanged In",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "qty_mp_issued",
+      "fieldtype": "Float",
+      "label": "Qty Issued from MP Stock",
+      "read_only": 1
+    },
+    {
+      "fetch_from": "item_code.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "SNWO Material Item"
+}

@@ -1,0 +1,1 @@
+from synarete_wms.synarete_wms.report.site_material_issue_report.site_material_issue_report import execute

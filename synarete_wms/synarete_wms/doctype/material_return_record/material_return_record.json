@@ -1,0 +1,274 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:MRR-{YYYY}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "material_type",
+    "installation_type",
+    "return_qty",
+    "material_issue",
+    "accountability",
+    "issued_qty",
+    "consumed_qty",
+    "previous_returned_qty",
+    "outstanding_qty",
+    "site",
+    "engineer",
+    "customer",
+    "htt_receipt",
+    "old_equipment_section",
+    "old_item_code",
+    "old_serial_no",
+    "return_status",
+    "expected_return_date",
+    "actual_return_date",
+    "new_equipment_section",
+    "new_item_code",
+    "new_serial_no",
+    "stock_entry",
+    "issue_stock_entry",
+    "notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "material_type",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Material Type",
+      "options": "HTT\nMP",
+      "reqd": 1
+    },
+    {
+      "fieldname": "installation_type",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Installation Type",
+      "options": "New Installation\nReplacement",
+      "reqd": 1
+    },
+    {
+      "default": "1",
+      "fieldname": "return_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity to Return/Replace",
+      "reqd": 1
+    },
+    {
+      "fieldname": "material_issue",
+      "fieldtype": "Link",
+      "label": "Material Issue",
+      "mandatory_depends_on": "eval:doc.material_type=='MP'",
+      "options": "WMS Material Issue"
+    },
+    {
+      "fieldname": "accountability",
+      "fieldtype": "Link",
+      "label": "Material Accountability",
+      "options": "WMS Material Accountability",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "issued_qty",
+      "fieldtype": "Float",
+      "label": "Issued Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "consumed_qty",
+      "fieldtype": "Float",
+      "label": "Consumed Quantity",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "previous_returned_qty",
+      "fieldtype": "Float",
+      "label": "Previously Returned",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "outstanding_qty",
+      "fieldtype": "Float",
+      "label": "Outstanding Quantity",
+      "read_only": 1
+    },
+    {
+      "fieldname": "site", 
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Site",
+      "options": "WMS Site",
+      "reqd": 1
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "label": "Engineer",
+      "options": "Employee",
+      "reqd": 1
+    },
+    {
+      "depends_on": "eval:doc.material_type=='HTT'",
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "label": "Customer",
+      "options": "Customer"
+    },
+    {
+      "depends_on": "eval:doc.material_type=='HTT'",
+      "fieldname": "htt_receipt",
+      "fieldtype": "Link",
+      "label": "HTT Material Receipt",
+      "options": "HTT Material Receipt"
+    },
+    {
+      "depends_on": "eval:doc.installation_type=='Replacement'",
+      "fieldname": "old_equipment_section",
+      "fieldtype": "Section Break",
+      "label": "Old Equipment"
+    },
+    {
+      "depends_on": "eval:doc.installation_type=='Replacement'",
+      "fieldname": "old_item_code",
+      "fieldtype": "Link",
+      "label": "Old Item",
+      "options": "Item"
+    },
+    {
+      "depends_on": "eval:doc.installation_type=='Replacement'",
+      "fieldname": "old_serial_no",
+      "fieldtype": "Data",
+      "label": "Old Serial No"
+    },
+    {
+      "default": "Pending Return",
+      "fieldname": "return_status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Return Status",
+      "options": "Pending Return\nReturned\nLost\nDisposed\nCustomer Returned",
+      "reqd": 1
+    },
+    {
+      "fieldname": "expected_return_date",
+      "fieldtype": "Date",
+      "label": "Expected Return Date"
+    },
+    {
+      "fieldname": "actual_return_date",
+      "fieldtype": "Date",
+      "label": "Actual Return Date"
+    },
+    {
+      "fieldname": "new_equipment_section",
+      "fieldtype": "Section Break",
+      "label": "New Equipment"
+    },
+    {
+      "fieldname": "new_item_code",
+      "fieldtype": "Link",
+      "label": "New Item",
+      "options": "Item"
+    },
+    {
+      "fieldname": "new_serial_no",
+      "fieldtype": "Data",
+      "label": "New Serial No"
+    },
+    {
+      "fieldname": "stock_entry",
+      "fieldtype": "Link",
+      "label": "Return Stock Entry",
+      "options": "Stock Entry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "issue_stock_entry",
+      "fieldtype": "Link",
+      "label": "Replacement Issue Stock Entry",
+      "options": "Stock Entry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Text Editor",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "Material Return Record",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "Material Return Record",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "print": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "print": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

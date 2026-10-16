@@ -1,0 +1,38 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "label": "Engineer",
+      "options": "Employee"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "\nActive\nReconciled\nClosed"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "Engineer Consignment Report",
+  "ref_doctype": "Engineer Consignment",
+  "report_name": "Engineer Consignment Report",
+  "report_type": "Script Report",
+  "roles": [
+    {
+      "role": "Stock Manager"
+    },
+    {
+      "role": "Warehouse Manager"
+    },
+    {
+      "role": "WMS Viewer"
+    },
+    {
+      "role": "System Manager"
+    }
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

@@ -1,0 +1,90 @@
+{
+  "actions": [],
+  "allow_import": 1,
+  "allow_rename": 1,
+  "autoname": "field:partner_name",
+  "creation": "2026-09-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "partner_name",
+    "disabled",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "partner_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Partner Name",
+      "reqd": 1,
+      "unique": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "disabled",
+      "fieldtype": "Check",
+      "label": "Disabled"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "Maintenance Partner",
+  "naming_rule": "By fieldname",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "export": 1,
+      "import": 1,
+      "report": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "import": 1,
+      "report": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "report": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "export": 1
+    },
+    {
+      "role": "WMS Viewer",
+      "read": 1,
+      "report": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "export": 1
+    }
+  ],
+  "sort_field": "partner_name",
+  "sort_order": "ASC",
+  "title_field": "partner_name",
+  "track_changes": 1
+}

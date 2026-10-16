@@ -1,0 +1,18 @@
+{
+  "add_total_row": 0,
+  "doctype": "Report",
+  "filters": [
+    {"fieldname": "item_code", "fieldtype": "Link", "label": "Item", "options": "Item"}
+  ],
+  "is_standard": "Yes",
+  "module": "Synarete WMS",
+  "name": "WMS Stock Reconciliation Exceptions",
+  "ref_doctype": "WMS Material Accountability",
+  "report_name": "WMS Stock Reconciliation Exceptions",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "System Manager"}
+  ]
+}

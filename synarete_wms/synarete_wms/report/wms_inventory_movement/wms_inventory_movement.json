@@ -1,0 +1,23 @@
+{
+  "add_total_row": 1,
+  "doctype": "Report",
+  "filters": [
+    {"fieldname": "from_date", "fieldtype": "Date", "label": "From Date", "reqd": 1},
+    {"fieldname": "to_date", "fieldtype": "Date", "label": "To Date", "reqd": 1},
+    {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company"},
+    {"fieldname": "item_code", "fieldtype": "Link", "label": "Item", "options": "Item"},
+    {"fieldname": "warehouse", "fieldtype": "Link", "label": "Warehouse", "options": "Warehouse"}
+  ],
+  "is_standard": "Yes",
+  "module": "Synarete WMS",
+  "name": "WMS Inventory Movement",
+  "ref_doctype": "Stock Ledger Entry",
+  "report_name": "WMS Inventory Movement",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ]
+}

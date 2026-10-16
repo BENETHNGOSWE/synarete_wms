@@ -1,0 +1,1 @@
+from synarete_wms.synarete_wms.report.wms_material_consumption_report.wms_material_consumption_report import execute

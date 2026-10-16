@@ -1,0 +1,67 @@
+{
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "fields": [
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "allocated_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Allocated",
+      "reqd": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "consumed_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Consumed",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "remaining_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Remaining",
+      "read_only": 1
+    },
+    {
+      "fetch_from": "item_code.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "fieldname": "serial_no",
+      "fieldtype": "Small Text",
+      "label": "Serial No"
+    },
+    {
+      "fieldname": "last_replenishment_date",
+      "fieldtype": "Date",
+      "label": "Last Replenishment",
+      "read_only": 1
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "Engineer Consignment Item"
+}

@@ -1,0 +1,190 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:DNS-{YYYY}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "delivery_note",
+    "material_issue",
+    "engineer",
+    "customer",
+    "site",
+    "status",
+    "issue_date",
+    "receiving_date",
+    "warehouse_officer",
+    "signature_section",
+    "signature",
+    "signed_at",
+    "qr_section",
+    "qr_code",
+    "qr_data",
+    "items_section",
+    "items"
+  ],
+  "fields": [
+    {
+      "fieldname": "delivery_note",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Delivery Note",
+      "options": "Delivery Note"
+    },
+    {
+      "fieldname": "material_issue",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "WMS Material Issue",
+      "options": "WMS Material Issue"
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Engineer",
+      "options": "Employee"
+    },
+    {
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Customer",
+      "options": "Customer"
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "default": "Pending",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Pending\nReceived\nSigned",
+      "reqd": 1
+    },
+    {
+      "default": "Today",
+      "fieldname": "issue_date",
+      "fieldtype": "Date",
+      "label": "Issue Date"
+    },
+    {
+      "fieldname": "receiving_date",
+      "fieldtype": "Date",
+      "label": "Receiving Date"
+    },
+    {
+      "default": "__user",
+      "fieldname": "warehouse_officer",
+      "fieldtype": "Link",
+      "label": "Warehouse Officer",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "signature_section",
+      "fieldtype": "Section Break",
+      "label": "Digital Signature"
+    },
+    {
+      "fieldname": "signature",
+      "fieldtype": "Signature",
+      "label": "Engineer Signature"
+    },
+    {
+      "fieldname": "signed_at",
+      "fieldtype": "Datetime",
+      "label": "Signed At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "qr_section",
+      "fieldtype": "Section Break",
+      "label": "QR Code"
+    },
+    {
+      "fieldname": "qr_code",
+      "fieldtype": "Attach Image",
+      "label": "QR Code",
+      "read_only": 1
+    },
+    {
+      "fieldname": "qr_data",
+      "fieldtype": "Small Text",
+      "hidden": 1,
+      "label": "QR Data",
+      "read_only": 1
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Delivered Items"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "Delivery Signature Item"
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "Delivery Note Signature",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "print": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "print": 1
+    }
+  ],
+  "sort_field": "issue_date",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

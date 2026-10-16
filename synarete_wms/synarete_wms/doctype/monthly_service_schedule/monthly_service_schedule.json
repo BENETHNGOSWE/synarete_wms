@@ -1,0 +1,179 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:MSS-{YYYY}-{MM}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "site",
+    "month_year",
+    "engineer",
+    "generator_type",
+    "engine_type",
+    "site_load_kva",
+    "status",
+    "items_section",
+    "items",
+    "issuance_section",
+    "material_issue",
+    "issued_date",
+    "issued_by",
+    "notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Site",
+      "options": "WMS Site",
+      "reqd": 1
+    },
+    {
+      "description": "Use the first day of the service month, for example 2026-08-01.",
+      "fieldname": "month_year",
+      "fieldtype": "Date",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Service Month",
+      "reqd": 1
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Engineer",
+      "options": "Employee",
+      "reqd": 1
+    },
+    {
+      "fieldname": "generator_type",
+      "fieldtype": "Select",
+      "label": "Generator Type",
+      "options": "\nPerkins\nCaterpillar\nCummins\nFG Wilson\nAksa\nOther"
+    },
+    {
+      "fieldname": "engine_type",
+      "fieldtype": "Data",
+      "label": "Engine Type"
+    },
+    {
+      "fieldname": "site_load_kva",
+      "fieldtype": "Float",
+      "label": "Site Load (KVA)"
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nSuggested\nApproved\nIssued\nCompleted",
+      "read_only": 1
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Service Materials"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "Monthly Service Item"
+    },
+    {
+      "fieldname": "issuance_section",
+      "fieldtype": "Section Break",
+      "label": "Issuance"
+    },
+    {
+      "fieldname": "material_issue",
+      "fieldtype": "Link",
+      "label": "WMS Material Issue",
+      "options": "WMS Material Issue",
+      "read_only": 1
+    },
+    {
+      "fieldname": "issued_date",
+      "fieldtype": "Date",
+      "label": "Issued Date",
+      "read_only": 1
+    },
+    {
+      "fieldname": "issued_by",
+      "fieldtype": "Link",
+      "label": "Issued By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Text Editor",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "Monthly Service Schedule",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "Monthly Service Schedule",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "print": 1
+    }
+  ],
+  "sort_field": "month_year",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

@@ -1,0 +1,1 @@
+from synarete_wms.synarete_wms.report.wms_engineer_and_site_stock.wms_engineer_and_site_stock import execute

@@ -1,0 +1,40 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "from_date",
+      "fieldtype": "Date",
+      "label": "From Date"
+    },
+    {
+      "fieldname": "to_date",
+      "fieldtype": "Date",
+      "label": "To Date"
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "fieldname": "work_order",
+      "fieldtype": "Link",
+      "label": "ServiceNow Work Order",
+      "options": "ServiceNow Site Work Order"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "SNWO MP Material Report",
+  "ref_doctype": "SNWO Material Transaction",
+  "report_name": "SNWO MP Material Report",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

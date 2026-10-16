@@ -1,0 +1,23 @@
+{
+  "add_total_row": 1,
+  "doctype": "Report",
+  "filters": [
+    {"fieldname": "from_date", "fieldtype": "Date", "label": "From Date"},
+    {"fieldname": "to_date", "fieldtype": "Date", "label": "To Date"},
+    {"fieldname": "site", "fieldtype": "Link", "label": "Site", "options": "WMS Site"},
+    {"fieldname": "engineer", "fieldtype": "Link", "label": "Engineer", "options": "Employee"},
+    {"fieldname": "site_work_order", "fieldtype": "Link", "label": "Site Work Order", "options": "Site Work Order"}
+  ],
+  "is_standard": "Yes",
+  "module": "Synarete WMS",
+  "name": "WMS Work Order Material Cost",
+  "ref_doctype": "Site Work Order",
+  "report_name": "WMS Work Order Material Cost",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ]
+}

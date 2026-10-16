@@ -1,0 +1,244 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:WMI-{YYYY}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "site",
+    "engineer",
+    "site_work_order",
+    "material_type",
+    "customer",
+    "htt_receipt",
+    "issue_date",
+    "issued_by",
+    "source_warehouse",
+    "target_warehouse",
+    "status",
+    "signature_section",
+    "signature_status",
+    "delivery_signature",
+    "items_section",
+    "items",
+    "stock_entry",
+    "delivery_note",
+    "notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Site",
+      "options": "WMS Site",
+      "reqd": 1
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Engineer",
+      "options": "Employee",
+      "mandatory_depends_on": "eval:doc.material_type=='MP' || doc.material_type=='Both'"
+    },
+    {
+      "fieldname": "site_work_order",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Site Work Order",
+      "options": "Site Work Order",
+      "mandatory_depends_on": "eval:doc.material_type=='MP'"
+    },
+    {
+      "fieldname": "material_type",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "label": "Material Type",
+      "options": "MP\nHTT\nBoth",
+      "reqd": 1
+    },
+    {
+      "depends_on": "eval:doc.material_type=='HTT' || doc.material_type=='Both'",
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "label": "Customer",
+      "options": "Customer"
+    },
+    {
+      "depends_on": "eval:doc.material_type=='HTT' || doc.material_type=='Both'",
+      "fieldname": "htt_receipt",
+      "fieldtype": "Link",
+      "label": "HTT Material Receipt",
+      "options": "HTT Material Receipt"
+    },
+    {
+      "default": "Today",
+      "fieldname": "issue_date",
+      "fieldtype": "Date",
+      "label": "Issue Date",
+      "reqd": 1
+    },
+    {
+      "default": "__user",
+      "fieldname": "issued_by",
+      "fieldtype": "Link",
+      "label": "Issued By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "depends_on": "eval:doc.material_type=='MP' || doc.material_type=='Both'",
+      "fieldname": "source_warehouse",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Source Warehouse",
+      "options": "Warehouse",
+      "mandatory_depends_on": "eval:doc.material_type=='MP' || doc.material_type=='Both'"
+    },
+    {
+      "depends_on": "eval:doc.material_type=='MP' || doc.material_type=='Both'",
+      "fieldname": "target_warehouse",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Target Warehouse",
+      "options": "Warehouse",
+      "mandatory_depends_on": "eval:doc.material_type=='MP' || doc.material_type=='Both'"
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nIssued\nCancelled",
+      "read_only": 1
+    },
+    {
+      "fieldname": "signature_section",
+      "fieldtype": "Section Break",
+      "label": "Delivery Confirmation"
+    },
+    {
+      "default": "Pending",
+      "fieldname": "signature_status",
+      "fieldtype": "Select",
+      "label": "Signature Status",
+      "options": "Pending\nReceived\nSigned",
+      "read_only": 1
+    },
+    {
+      "fieldname": "delivery_signature",
+      "fieldtype": "Link",
+      "label": "Delivery Signature",
+      "options": "Delivery Note Signature",
+      "read_only": 1
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Items"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "WMS Material Issue Item"
+    },
+    {
+      "fieldname": "stock_entry",
+      "fieldtype": "Link",
+      "label": "Stock Entry",
+      "options": "Stock Entry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "delivery_note",
+      "fieldtype": "Link",
+      "label": "Printable Delivery Note",
+      "options": "Delivery Note",
+      "read_only": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Text Editor",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "WMS Material Issue",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "WMS Material Issue",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "import": 1,
+      "print": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "print": 1
+    },
+    {
+      "role": "WMS Viewer",
+      "read": 1,
+      "report": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "print": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

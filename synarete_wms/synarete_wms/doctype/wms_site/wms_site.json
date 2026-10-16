@@ -1,0 +1,213 @@
+{
+  "actions": [],
+  "allow_import": 1,
+  "allow_rename": 1,
+  "autoname": "field:site_code",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "site_code",
+    "legacy_id",
+    "site_name",
+    "fe_name",
+    "qse_name",
+    "dg_specialist",
+    "status",
+    "mp",
+    "maintenance_partner",
+    "transition_partner",
+    "location_section",
+    "region",
+    "district",
+    "address",
+    "customer",
+    "contact_section",
+    "primary_contact",
+    "contact_phone",
+    "default_engineer",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "site_code",
+      "fieldtype": "Data",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "HTA Site ID",
+      "reqd": 1,
+      "unique": 1
+    },
+    {
+      "fieldname": "legacy_id",
+      "fieldtype": "Data",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Legacy ID"
+    },
+    {
+      "fieldname": "site_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Site Name",
+      "reqd": 1
+    },
+    {
+      "fieldname": "fe_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "FE Name"
+    },
+    {
+      "fieldname": "qse_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "QSE Name"
+    },
+    {
+      "fieldname": "dg_specialist",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "DG Specialist"
+    },
+    {
+      "default": "Active",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Site Status",
+      "options": "Active\nInactive",
+      "reqd": 1
+    },
+    {
+      "fieldname": "mp",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "MP"
+    },
+    {
+      "fieldname": "maintenance_partner",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "label": "Maintenance Partner",
+      "options": "Maintenance Partner"
+    },
+    {
+      "fieldname": "transition_partner",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "label": "Transition Partner",
+      "options": "Maintenance Partner"
+    },
+    {
+      "fieldname": "location_section",
+      "fieldtype": "Section Break",
+      "label": "Location"
+    },
+    {
+      "fieldname": "region",
+      "fieldtype": "Data",
+      "in_filter": 1,
+      "label": "Region"
+    },
+    {
+      "fieldname": "district",
+      "fieldtype": "Data",
+      "in_filter": 1,
+      "label": "District"
+    },
+    {
+      "fieldname": "address",
+      "fieldtype": "Small Text",
+      "label": "Address"
+    },
+    {
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "label": "Customer",
+      "options": "Customer"
+    },
+    {
+      "fieldname": "contact_section",
+      "fieldtype": "Section Break",
+      "label": "Contact and Assignment"
+    },
+    {
+      "fieldname": "primary_contact",
+      "fieldtype": "Data",
+      "label": "Primary Contact"
+    },
+    {
+      "fieldname": "contact_phone",
+      "fieldtype": "Data",
+      "label": "Contact Phone"
+    },
+    {
+      "fieldname": "default_engineer",
+      "fieldtype": "Link",
+      "label": "Default Engineer",
+      "options": "Employee"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Text Editor",
+      "label": "Notes"
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "WMS Site",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "export": 1,
+      "import": 1,
+      "report": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "import": 1,
+      "report": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "report": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "create": 1,
+      "export": 1
+    },
+    {
+      "role": "WMS Viewer",
+      "read": 1,
+      "report": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "export": 1
+    }
+  ],
+  "sort_field": "site_name",
+  "sort_order": "ASC",
+  "title_field": "site_name",
+  "track_changes": 1
+}

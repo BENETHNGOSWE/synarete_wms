@@ -1,0 +1,1 @@
+from .wms_monthly_inventory_summary import execute

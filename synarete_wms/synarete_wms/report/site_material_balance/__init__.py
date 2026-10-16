@@ -1,0 +1,1 @@
+from synarete_wms.synarete_wms.report.wms_site_material_balance.wms_site_material_balance import execute

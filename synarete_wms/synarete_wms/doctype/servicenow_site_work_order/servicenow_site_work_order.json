@@ -1,0 +1,445 @@
+{
+  "actions": [],
+  "allow_import": 1,
+  "allow_rename": 0,
+  "autoname": "field:swo_number",
+  "creation": "2026-09-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "swo_number",
+    "site",
+    "maintenance_partner",
+    "transition_partner",
+    "status",
+    "status_group",
+    "is_pending",
+    "days_open",
+    "priority",
+    "short_description",
+    "column_break_identity",
+    "source_system",
+    "order_type",
+    "process_status",
+    "mp_material_used",
+    "awaiting_warehouse_issue",
+    "interchange_count",
+    "last_interchange_on",
+    "fault_section",
+    "fault_code",
+    "fault_group",
+    "fault",
+    "fault_category",
+    "part_section",
+    "part_code",
+    "part_name",
+    "part_category",
+    "part_group",
+    "quantity",
+    "assignment_section",
+    "assigned_to",
+    "created_by",
+    "opened_at",
+    "created_on",
+    "column_break_dates",
+    "closed_at",
+    "actual_wo_date",
+    "due_date",
+    "flags_section",
+    "is_solar_asset",
+    "is_transformer_asset",
+    "u_escalated_by_tenant",
+    "u_p0p4tab",
+    "description_section",
+    "description",
+    "work_notes",
+    "materials_section",
+    "materials"
+  ],
+  "fields": [
+    {
+      "fieldname": "swo_number",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "in_standard_filter": 1,
+      "label": "SWO Number",
+      "reqd": 1,
+      "unique": 1,
+      "description": "ServiceNow Work Order ID. Auto-filled by import."
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "in_standard_filter": 1,
+      "label": "Site",
+      "options": "WMS Site",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "site.maintenance_partner",
+      "fieldname": "maintenance_partner",
+      "fieldtype": "Link",
+      "label": "Maintenance Partner",
+      "options": "Maintenance Partner",
+      "read_only": 1
+    },
+    {
+      "fetch_from": "site.transition_partner",
+      "fieldname": "transition_partner",
+      "fieldtype": "Link",
+      "label": "Transition Partner",
+      "options": "Maintenance Partner",
+      "read_only": 1
+    },
+    {
+      "default": "Awaiting Material",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Status",
+      "options": "Awaiting Material\nOpen\nWork in Progress\nPending\nOn Hold\nResolved\nClosed Complete\nClosed Incomplete\nClosed Rejected\nCancelled",
+      "reqd": 1
+    },
+    {
+      "default": "Open",
+      "fieldname": "status_group",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Status Group",
+      "options": "Open\nClosed",
+      "reqd": 1,
+      "read_only": 1
+    },
+    {
+      "default": "1",
+      "fieldname": "is_pending",
+      "fieldtype": "Check",
+      "in_filter": 1,
+      "label": "Is Pending",
+      "reqd": 1,
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "days_open",
+      "fieldtype": "Int",
+      "in_list_view": 1,
+      "label": "Days Open",
+      "read_only": 1
+    },
+    {
+      "fieldname": "priority",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "label": "Priority",
+      "options": "0 - Very Critical\n1 - Critical\n2 - High\n3 - Moderate\n4 - Low"
+    },
+    {
+      "fieldname": "short_description",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Short Description"
+    },
+    {
+      "fieldname": "column_break_identity",
+      "fieldtype": "Column Break"
+    },
+    {
+      "default": "ServiceNow",
+      "fieldname": "source_system",
+      "fieldtype": "Data",
+      "label": "Source System",
+      "reqd": 1,
+      "read_only": 1
+    },
+    {
+      "default": "Service",
+      "fieldname": "order_type",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Order Type",
+      "options": "Service\nMaterial",
+      "reqd": 1
+    },
+    {
+      "default": "Created",
+      "fieldname": "process_status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Material Process Status",
+      "options": "Created\nMaterial Required\nMaterial Received\nMaterial Issued\nMaterial Consumed\nReconciliation\nCompleted",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "mp_material_used",
+      "fieldtype": "Check",
+      "in_filter": 1,
+      "label": "MP Material Used",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "interchange_count",
+      "fieldtype": "Int",
+      "label": "Interchange Count",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_interchange_on",
+      "fieldtype": "Date",
+      "label": "Last Interchange On",
+      "read_only": 1
+    },
+    {
+      "fieldname": "fault_section",
+      "fieldtype": "Section Break",
+      "label": "Fault"
+    },
+    {
+      "fieldname": "fault_code",
+      "fieldtype": "Data",
+      "in_filter": 1,
+      "label": "Fault Code"
+    },
+    {
+      "fieldname": "fault_group",
+      "fieldtype": "Data",
+      "label": "Fault Group"
+    },
+    {
+      "fieldname": "fault",
+      "fieldtype": "Data",
+      "label": "Fault"
+    },
+    {
+      "fieldname": "fault_category",
+      "fieldtype": "Data",
+      "label": "Fault Category"
+    },
+    {
+      "fieldname": "part_section",
+      "fieldtype": "Section Break",
+      "label": "ServiceNow Part"
+    },
+    {
+      "fieldname": "part_code",
+      "fieldtype": "Link",
+      "label": "Part Code",
+      "options": "Item"
+    },
+    {
+      "fieldname": "part_name",
+      "fieldtype": "Data",
+      "label": "Part Name"
+    },
+    {
+      "fieldname": "part_category",
+      "fieldtype": "Data",
+      "label": "Part Category"
+    },
+    {
+      "fieldname": "part_group",
+      "fieldtype": "Data",
+      "label": "Part Group"
+    },
+    {
+      "default": "0",
+      "fieldname": "quantity",
+      "fieldtype": "Float",
+      "label": "Quantity"
+    },
+    {
+      "fieldname": "assignment_section",
+      "fieldtype": "Section Break",
+      "label": "Assignment and Dates"
+    },
+    {
+      "fieldname": "assigned_to",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "label": "Assigned Engineer",
+      "options": "Employee",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "description": "Engineer who owns this work order. Shown on the engineer list."
+    },
+    {
+      "fieldname": "created_by",
+      "fieldtype": "Data",
+      "label": "Created By"
+    },
+    {
+      "fieldname": "opened_at",
+      "fieldtype": "Datetime",
+      "label": "Opened At"
+    },
+    {
+      "fieldname": "created_on",
+      "fieldtype": "Datetime",
+      "in_list_view": 1,
+      "label": "Created On",
+      "reqd": 1
+    },
+    {
+      "fieldname": "column_break_dates",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "closed_at",
+      "fieldtype": "Datetime",
+      "label": "Closed At"
+    },
+    {
+      "fieldname": "actual_wo_date",
+      "fieldtype": "Date",
+      "label": "Actual WO Date"
+    },
+    {
+      "fieldname": "due_date",
+      "fieldtype": "Date",
+      "label": "Due Date"
+    },
+    {
+      "fieldname": "flags_section",
+      "fieldtype": "Section Break",
+      "label": "Flags"
+    },
+    {
+      "default": "0",
+      "fieldname": "is_solar_asset",
+      "fieldtype": "Check",
+      "label": "Is Solar Asset"
+    },
+    {
+      "default": "0",
+      "fieldname": "is_transformer_asset",
+      "fieldtype": "Check",
+      "label": "Is Transformer Asset"
+    },
+    {
+      "fieldname": "u_escalated_by_tenant",
+      "fieldtype": "Data",
+      "label": "Escalated By Tenant"
+    },
+    {
+      "default": "0",
+      "fieldname": "u_p0p4tab",
+      "fieldtype": "Check",
+      "label": "P0P4TAB"
+    },
+    {
+      "fieldname": "description_section",
+      "fieldtype": "Section Break",
+      "label": "Description"
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Text",
+      "label": "Description"
+    },
+    {
+      "fieldname": "work_notes",
+      "fieldtype": "Text",
+      "label": "Work Notes"
+    },
+    {
+      "fieldname": "materials_section",
+      "fieldtype": "Section Break",
+      "label": "Material Lifecycle (Requested \u2192 Received \u2192 Issued \u2192 Consumed)"
+    },
+    {
+      "fieldname": "materials",
+      "fieldtype": "Table",
+      "label": "Materials",
+      "options": "SNWO Material Item"
+    },
+    {
+      "default": "0",
+      "fieldname": "awaiting_warehouse_issue",
+      "fieldtype": "Check",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "in_filter": 1,
+      "label": "Awaiting Material",
+      "read_only": 1,
+      "description": "Warehouse still needs to Receive and/or Issue material for this work order. New material WOs stay here until issued."
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "ServiceNow Site Work Order",
+  "naming_rule": "By fieldname",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "export": 1,
+      "import": 1,
+      "report": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "import": 1,
+      "report": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "report": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "WMS Viewer",
+      "read": 1,
+      "report": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "export": 1,
+      "print": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "WMS Engineer",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "export": 1,
+      "print": 1
+    }
+  ],
+  "search_fields": "swo_number,site,short_description,status,assigned_to",
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "title_field": "swo_number",
+  "track_changes": 1
+}

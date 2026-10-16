@@ -1,0 +1,243 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:SNMT-{YYYY}-{#####}",
+  "creation": "2026-09-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "transaction_type",
+    "posting_date",
+    "warehouse",
+    "performed_by",
+    "status",
+    "column_break_wo",
+    "original_work_order",
+    "received_for_work_order",
+    "issued_to_work_order",
+    "site",
+    "flags_section",
+    "is_interchange",
+    "is_mp_stock",
+    "interchange_reason",
+    "items_section",
+    "items",
+    "notes",
+    "stock_entry",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "transaction_type",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Transaction Type",
+      "reqd": 1,
+      "options": "Request\nReceive\nIssue\nMP Issue\nInterchange\nConsume\nReconcile"
+    },
+    {
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Posting Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "warehouse",
+      "fieldtype": "Link",
+      "label": "Warehouse",
+      "options": "Warehouse",
+      "mandatory_depends_on": "eval:doc.transaction_type=='MP Issue' || doc.is_mp_stock"
+    },
+    {
+      "fieldname": "performed_by",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Performed By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "label": "Status",
+      "options": "Draft\nSubmitted\nCancelled",
+      "read_only": 1
+    },
+    {
+      "fieldname": "column_break_wo",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "original_work_order",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Original Work Order",
+      "options": "ServiceNow Site Work Order",
+      "reqd": 1
+    },
+    {
+      "fieldname": "received_for_work_order",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "label": "Received For Work Order",
+      "options": "ServiceNow Site Work Order"
+    },
+    {
+      "fieldname": "issued_to_work_order",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "in_filter": 1,
+      "label": "Issued To Work Order",
+      "options": "ServiceNow Site Work Order"
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "fieldname": "flags_section",
+      "fieldtype": "Section Break",
+      "label": "Interchange and MP"
+    },
+    {
+      "default": "0",
+      "fieldname": "is_interchange",
+      "fieldtype": "Check",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Is Interchange"
+    },
+    {
+      "default": "0",
+      "fieldname": "is_mp_stock",
+      "fieldtype": "Check",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Issued from MP Stock"
+    },
+    {
+      "fieldname": "interchange_reason",
+      "fieldtype": "Small Text",
+      "label": "Reason for Interchange",
+      "mandatory_depends_on": "eval:doc.is_interchange"
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Materials"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "SNWO Material Transaction Item"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "stock_entry",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Stock Entry",
+      "options": "Stock Entry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "SNWO Material Transaction",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "SNWO Material Transaction",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "import": 1,
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "print": 1
+    },
+    {
+      "role": "WMS Viewer",
+      "read": 1,
+      "report": 1
+    },
+    {
+      "role": "Employee",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "print": 1,
+      "submit": 1
+    },
+    {
+      "role": "WMS Engineer",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "print": 1,
+      "export": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

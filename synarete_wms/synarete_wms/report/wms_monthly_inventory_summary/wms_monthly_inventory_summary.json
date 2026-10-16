@@ -1,0 +1,24 @@
+{
+  "add_total_row": 1,
+  "doctype": "Report",
+  "filters": [
+    {"fieldname": "from_date", "fieldtype": "Date", "label": "From Date", "reqd": 1},
+    {"fieldname": "to_date", "fieldtype": "Date", "label": "To Date", "reqd": 1},
+    {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company"},
+    {"fieldname": "site", "fieldtype": "Link", "label": "Site", "options": "WMS Site"},
+    {"fieldname": "engineer", "fieldtype": "Link", "label": "Engineer", "options": "Employee"},
+    {"fieldname": "item_code", "fieldtype": "Link", "label": "Item", "options": "Item"}
+  ],
+  "is_standard": "Yes",
+  "module": "Synarete WMS",
+  "name": "WMS Monthly Inventory Summary",
+  "ref_doctype": "Stock Ledger Entry",
+  "report_name": "WMS Monthly Inventory Summary",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ]
+}

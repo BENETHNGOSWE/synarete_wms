@@ -1,0 +1,159 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:STE-{YYYY}-{MM}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "warehouse",
+    "month_year",
+    "count_date",
+    "counted_by",
+    "verified_by",
+    "status",
+    "items_section",
+    "items",
+    "reconciliation_section",
+    "stock_reconciliation",
+    "reconciliation_notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "warehouse",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Warehouse",
+      "options": "Warehouse",
+      "reqd": 1
+    },
+    {
+      "fieldname": "month_year",
+      "fieldtype": "Date",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Stock Taking Month",
+      "reqd": 1
+    },
+    {
+      "default": "Today",
+      "fieldname": "count_date",
+      "fieldtype": "Date",
+      "label": "Count Date",
+      "reqd": 1
+    },
+    {
+      "default": "__user",
+      "fieldname": "counted_by",
+      "fieldtype": "Link",
+      "label": "Counted By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "verified_by",
+      "fieldtype": "Link",
+      "label": "Verified By",
+      "options": "User"
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nCounted\nVerified\nReconciled",
+      "read_only": 1
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Stock Count Items"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "Stock Taking Item"
+    },
+    {
+      "fieldname": "reconciliation_section",
+      "fieldtype": "Section Break",
+      "label": "Reconciliation"
+    },
+    {
+      "fieldname": "stock_reconciliation",
+      "fieldtype": "Link",
+      "label": "Stock Reconciliation",
+      "options": "Stock Reconciliation",
+      "read_only": 1
+    },
+    {
+      "fieldname": "reconciliation_notes",
+      "fieldtype": "Text Editor",
+      "label": "Reconciliation Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "Stock Taking Entry",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "Stock Taking Entry",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "print": 1
+    }
+  ],
+  "sort_field": "month_year",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

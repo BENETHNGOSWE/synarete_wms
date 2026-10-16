@@ -1,0 +1,36 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "work_order",
+      "fieldtype": "Link",
+      "label": "ServiceNow Work Order",
+      "options": "ServiceNow Site Work Order"
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "label": "Item",
+      "options": "Item"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "SNWO Material Traceability",
+  "ref_doctype": "ServiceNow Site Work Order",
+  "report_name": "SNWO Material Traceability",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

@@ -1,0 +1,44 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "label": "Customer",
+      "options": "Customer"
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "fieldname": "transaction_type",
+      "fieldtype": "Select",
+      "label": "Transaction Type",
+      "options": "\nReceipt\nDispatch\nReturn"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "HTT Material Dashboard",
+  "ref_doctype": "WMS HTT Transaction",
+  "report_name": "HTT Material Dashboard",
+  "report_type": "Script Report",
+  "roles": [
+    {
+      "role": "Stock Manager"
+    },
+    {
+      "role": "Warehouse Manager"
+    },
+    {
+      "role": "WMS Viewer"
+    },
+    {
+      "role": "System Manager"
+    }
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

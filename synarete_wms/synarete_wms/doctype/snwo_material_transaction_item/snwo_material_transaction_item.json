@@ -1,0 +1,94 @@
+{
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "item_code",
+    "item_name",
+    "qty",
+    "uom",
+    "original_work_order",
+    "received_for_work_order",
+    "issued_to_work_order",
+    "is_interchange",
+    "is_mp_stock",
+    "remarks"
+  ],
+  "fields": [
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "fieldname": "original_work_order",
+      "fieldtype": "Link",
+      "label": "Original Work Order",
+      "options": "ServiceNow Site Work Order",
+      "read_only": 1
+    },
+    {
+      "fieldname": "received_for_work_order",
+      "fieldtype": "Link",
+      "label": "Received For Work Order",
+      "options": "ServiceNow Site Work Order",
+      "read_only": 1
+    },
+    {
+      "fieldname": "issued_to_work_order",
+      "fieldtype": "Link",
+      "label": "Issued To Work Order",
+      "options": "ServiceNow Site Work Order",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "is_interchange",
+      "fieldtype": "Check",
+      "in_list_view": 1,
+      "label": "Interchange",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "is_mp_stock",
+      "fieldtype": "Check",
+      "in_list_view": 1,
+      "label": "MP Stock",
+      "read_only": 1
+    },
+    {
+      "fieldname": "remarks",
+      "fieldtype": "Small Text",
+      "label": "Remarks"
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "SNWO Material Transaction Item"
+}

@@ -1,0 +1,43 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "warehouse",
+      "fieldtype": "Link",
+      "label": "Warehouse",
+      "options": "Warehouse"
+    },
+    {
+      "fieldname": "month_year",
+      "fieldtype": "Date",
+      "label": "Month"
+    },
+    {
+      "fieldname": "material_type",
+      "fieldtype": "Select",
+      "label": "Material Type",
+      "options": "\nMP\nHTT"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "WMS Stock Taking Report",
+  "ref_doctype": "Stock Taking Entry",
+  "report_name": "WMS Stock Taking Report",
+  "report_type": "Script Report",
+  "roles": [
+    {
+      "role": "Stock Manager"
+    },
+    {
+      "role": "Warehouse Manager"
+    },
+    {
+      "role": "WMS Viewer"
+    },
+    {
+      "role": "System Manager"
+    }
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}
