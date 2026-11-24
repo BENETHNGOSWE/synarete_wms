@@ -10,6 +10,7 @@
     "site",
     "engineer",
     "site_work_order",
+    "servicenow_work_order",
     "material_type",
     "customer",
     "htt_receipt",
@@ -53,6 +54,15 @@
       "label": "Site Work Order",
       "options": "Site Work Order",
       "mandatory_depends_on": "eval:doc.material_type=='MP'"
+    },
+    {
+      "depends_on": "eval:doc.material_type=='HTT'",
+      "description": "Optional explicit link when this HTT dispatch supplies an imported ServiceNow work order. Reporting only; it does not change the work-order process.",
+      "fieldname": "servicenow_work_order",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "label": "ServiceNow Work Order (HTT tracking)",
+      "options": "ServiceNow Site Work Order"
     },
     {
       "fieldname": "material_type",

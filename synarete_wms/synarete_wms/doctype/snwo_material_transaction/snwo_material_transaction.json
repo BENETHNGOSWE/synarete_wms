@@ -34,6 +34,7 @@
       "in_list_view": 1,
       "in_filter": 1,
       "label": "Transaction Type",
+      "description": "Use Consume for material that was used. Reconcile is only for unused issued quantity; it cannot exceed the quantity still unconsumed. Use Return Material to record the closeout and any physical transfer back to Main Warehouse.",
       "reqd": 1,
       "options": "Request\nReceive\nIssue\nMP Issue\nInterchange\nConsume\nReconcile"
     },

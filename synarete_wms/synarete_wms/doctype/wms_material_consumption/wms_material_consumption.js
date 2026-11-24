@@ -53,6 +53,30 @@ frappe.ui.form.on("WMS Material Consumption", {
     },
 
     refresh(frm) {
+        const is_manager =
+            frappe.user.has_role("Stock Manager") ||
+            frappe.user.has_role("Warehouse Manager") ||
+            frappe.user.has_role("System Manager");
+
+        if (frm.doc.status === "Pending Verification" && is_manager) {
+            frm.dashboard.set_headline_alert(
+                __("Choose the Expense Account on each item, then Approve. Inventory is deducted only after Approve."),
+                "orange"
+            );
+            (frm.doc.items || []).forEach((row) => {
+                if (row.item_code && !row.expense_account) {
+                    frappe.xcall(
+                        "synarete_wms.synarete_wms.utils.stock.get_item_expense_account",
+                        { item_code: row.item_code }
+                    ).then((account) => {
+                        if (account) {
+                            frappe.model.set_value(row.doctype, row.name, "expense_account", account);
+                        }
+                    });
+                }
+            });
+        }
+
         if (
             frm.is_new() ||
             frm.doc.docstatus !== 0
@@ -60,56 +84,56 @@ frappe.ui.form.on("WMS Material Consumption", {
             return;
         }
 
-        const is_manager =
-            frappe.user.has_role("Stock Manager") ||
-            frappe.user.has_role("Warehouse Manager") ||
-            frappe.user.has_role("System Manager");
-
         const apply_action = (action, message) => {
-            frappe.confirm(
-                message,
-                () => frappe.xcall(
+            frappe.confirm(message, () => {
+                const run = () => frappe.xcall(
                     "synarete_wms.synarete_wms.utils.workflow_api.apply_wms_workflow",
                     {
                         doc: frm.doc,
                         action: action,
                     }
-                ).then(() => frm.reload_doc())
-            );
+                ).then(() => frm.reload_doc());
+                if (frm.is_dirty()) {
+                    frm.save().then(run);
+                } else {
+                    run();
+                }
+            });
         };
 
-        if (frm.doc.status === "Draft") {
-            if (is_manager) {
-                frm.add_custom_button(
-                    __("Submit"),
-                    () => apply_action(
-                        "Submit",
-                        __("Finalize consumption and deduct stock?")
-                    ),
-                    __("Actions")
-                );
-            } else if (
-                frappe.user.has_role("Employee") ||
-                frappe.user.has_role("Stock User")
-            ) {
-                frm.add_custom_button(
-                    __("Submit"),
-                    () => apply_action(
-                        "Submit",
-                        __("Submit consumption for Stock Manager verification?")
-                    ),
-                    __("Actions")
-                );
-            }
+        const can_request =
+            is_manager
+            || frappe.user.has_role("Employee")
+            || frappe.user.has_role("Stock User")
+            || frappe.user.has_role("WMS Engineer");
+
+        if (frm.doc.status === "Draft" && can_request) {
+            const submit_consume = () => apply_action(
+                "Submit",
+                __("Submit consumption request? Warehouse will choose the expense GL and Approve. Stock is not deducted yet.")
+            );
+            frm.page.set_primary_action(__("Submit"), submit_consume, "octicon octicon-check");
+            frm.add_custom_button(__("Submit"), submit_consume, __("Actions"));
         }
 
         if (frm.doc.status === "Pending Verification" && is_manager) {
             frm.add_custom_button(
                 __("Approve"),
-                () => apply_action(
-                    "Approve",
-                    __("Approve consumption and deduct stock?")
-                ),
+                () => {
+                    const missing = (frm.doc.items || []).filter((row) => flt(row.qty) > 0 && !row.expense_account);
+                    if (missing.length) {
+                        frappe.msgprint({
+                            title: __("Expense Account required"),
+                            indicator: "red",
+                            message: __("Choose an Expense Account on each consumed item before Approve."),
+                        });
+                        return;
+                    }
+                    apply_action(
+                        "Approve",
+                        __("Approve consumption, post expense GL, and deduct inventory?")
+                    );
+                },
                 __("Actions")
             );
 
@@ -128,6 +152,23 @@ frappe.ui.form.on("WMS Material Consumption", {
 frappe.ui.form.on("WMS Material Consumption Item", {
     qty(frm, cdt, cdn) {
         refresh_consumption_row(frm, cdt, cdn);
+    },
+    item_code(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        if (!row || !row.item_code) return;
+        const is_manager =
+            frappe.user.has_role("Stock Manager") ||
+            frappe.user.has_role("Warehouse Manager") ||
+            frappe.user.has_role("System Manager");
+        if (!is_manager) return;
+        frappe.xcall(
+            "synarete_wms.synarete_wms.utils.stock.get_item_expense_account",
+            { item_code: row.item_code }
+        ).then((account) => {
+            if (account && !locals[cdt][cdn].expense_account) {
+                frappe.model.set_value(cdt, cdn, "expense_account", account);
+            }
+        });
     },
 });
 

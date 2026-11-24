@@ -12,9 +12,16 @@
     "main_warehouse",
     "field_issued_warehouse",
     "internal_delivery_customer",
+    "accounting_section",
+    "consume_expense_account",
+    "opening_adjustment_account",
     "htt_section",
     "htt_tracking_mode",
     "htt_overdue_days",
+    "workflow_section",
+    "allow_self_approve",
+    "allow_po_over_receive",
+    "allow_complete_without_closeout",
     "role_section",
     "stock_manager_role",
     "stock_user_role"
@@ -61,6 +68,25 @@
       "options": "Customer"
     },
     {
+      "fieldname": "accounting_section",
+      "fieldtype": "Section Break",
+      "label": "Inventory vs Expense"
+    },
+    {
+      "description": "Debited when the engineer Consumes (stock leaves inventory). Use 5010010 - CONSUMABLES - SEL or the spare-parts expense. Not COGS unless accounts say so. Receive and Issue never use this account.",
+      "fieldname": "consume_expense_account",
+      "fieldtype": "Link",
+      "label": "Consume Expense Account",
+      "options": "Account"
+    },
+    {
+      "description": "Only for loading stock you already own (opening / previously expensed). Use as Difference Account on Stock Reconciliation or Material Receipt so remaining qty Debits inventory and Credits this expense. Never the supplier. Never 1040010.",
+      "fieldname": "opening_adjustment_account",
+      "fieldtype": "Link",
+      "label": "Opening Stock Adjustment Account",
+      "options": "Account"
+    },
+    {
       "fieldname": "htt_section",
       "fieldtype": "Section Break",
       "label": "HTT Materials"
@@ -77,6 +103,32 @@
       "fieldname": "htt_overdue_days",
       "fieldtype": "Int",
       "label": "HTT Overdue Days"
+    },
+    {
+      "fieldname": "workflow_section",
+      "fieldtype": "Section Break",
+      "label": "Work Order Approval"
+    },
+    {
+      "default": "0",
+      "description": "If not ticked, the user who created a Site Work Order cannot Approve it. Another Warehouse or Stock Manager must Approve. Tick this if one warehouse user must do every step (create through close).",
+      "fieldname": "allow_self_approve",
+      "fieldtype": "Check",
+      "label": "Allow Self-Approve"
+    },
+    {
+      "default": "0",
+      "description": "If not ticked, a Receive Batch cannot exceed the outstanding PO quantity.",
+      "fieldname": "allow_po_over_receive",
+      "fieldtype": "Check",
+      "label": "Allow PO Over-Receive"
+    },
+    {
+      "default": "0",
+      "description": "If not ticked, Site Work Orders and ServiceNow Work Orders cannot be Completed until WMS Material Closeout is submitted (Issued = Used + Returned unused).",
+      "fieldname": "allow_complete_without_closeout",
+      "fieldtype": "Check",
+      "label": "Allow Complete Without Closeout"
     },
     {
       "fieldname": "role_section",

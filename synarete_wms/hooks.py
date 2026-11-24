@@ -4,7 +4,7 @@ app_publisher = "Eveneth Beneth"
 app_description = "Warehouse Management System for Synarete Engineering Limited"
 app_email = "benethemmanueli1701@gmail.com"
 app_license = "MIT"
-app_version = "0.1.82"
+app_version = "0.1.97"
 
 required_apps = ["frappe", "erpnext", "hrms"]
 
@@ -60,7 +60,11 @@ scheduler_events = {
 
 doc_events = {
     "Purchase Receipt": {
-        "on_submit": "synarete_wms.synarete_wms.utils.stock.on_purchase_receipt_submit",
+        "on_submit": "synarete_wms.synarete_wms.utils.po_receive.on_purchase_receipt_submit",
+        "on_cancel": "synarete_wms.synarete_wms.utils.po_receive.on_purchase_receipt_cancel",
+    },
+    "Purchase Order": {
+        "validate": "synarete_wms.synarete_wms.utils.po_receive.on_purchase_order_validate",
     },
     "Delivery Note": {
         "before_submit": "synarete_wms.synarete_wms.utils.delivery.prevent_wms_delivery_note_submit",

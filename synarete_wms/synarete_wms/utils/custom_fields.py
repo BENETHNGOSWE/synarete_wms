@@ -79,6 +79,26 @@ CUSTOM_FIELDS = {
             "insert_after": "custom_wms_total_received_qty",
             "module": "Synarete WMS",
         },
+        {
+            "fieldname": "custom_wms_receive_status",
+            "label": "WMS Receive Status",
+            "fieldtype": "Select",
+            "options": "\nOpen\nPartially Received\nCompleted",
+            "default": "Open",
+            "read_only": 1,
+            "in_list_view": 1,
+            "in_filter": 1,
+            "insert_after": "custom_wms_remaining_qty",
+            "module": "Synarete WMS",
+        },
+        {
+            "fieldname": "custom_wms_supplier_outstanding",
+            "label": "WMS Previous Outstanding",
+            "fieldtype": "Small Text",
+            "read_only": 1,
+            "insert_after": "custom_wms_receive_status",
+            "module": "Synarete WMS",
+        },
     ],
     "Purchase Order Item": [
         {

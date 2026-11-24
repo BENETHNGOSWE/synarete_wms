@@ -23,6 +23,7 @@
     "accountability_status",
     "last_consumption",
     "last_return",
+    "last_closeout",
     "last_allocation"
   ],
   "fields": [
@@ -155,6 +156,13 @@
       "fieldtype": "Link",
       "label": "Last Return",
       "options": "Material Return Record",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_closeout",
+      "fieldtype": "Link",
+      "label": "Last Material Closeout",
+      "options": "WMS Material Closeout",
       "read_only": 1
     },
     {

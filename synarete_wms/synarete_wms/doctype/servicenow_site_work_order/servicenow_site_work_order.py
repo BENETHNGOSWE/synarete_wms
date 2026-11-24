@@ -41,6 +41,14 @@ class ServiceNowSiteWorkOrder(Document):
             frappe.throw("SWO Number is required.")
         if not self.site:
             frappe.throw("Site is required.")
+        if (
+            not self.assigned_to
+            and not frappe.flags.in_migrate
+            and not frappe.flags.get("snwo_import")
+        ):
+            frappe.throw(
+                "Assign an Engineer so they can see this job when they log in."
+            )
         if self.process_status != "Completed" and not frappe.flags.in_migrate:
             self.process_status = derive_process_status(self)
         apply_awaiting_material(self)

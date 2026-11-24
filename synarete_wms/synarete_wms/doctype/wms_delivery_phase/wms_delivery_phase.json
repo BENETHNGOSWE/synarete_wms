@@ -13,6 +13,7 @@
     "remaining_qty",
     "purchase_receipt",
     "supplier",
+    "received_by",
     "notes"
   ],
   "fields": [
@@ -71,6 +72,12 @@
       "fieldtype": "Link",
       "label": "Supplier",
       "options": "Supplier"
+    },
+    {
+      "fieldname": "received_by",
+      "fieldtype": "Link",
+      "label": "Received By",
+      "options": "User"
     },
     {
       "fieldname": "notes",

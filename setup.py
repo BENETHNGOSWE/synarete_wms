@@ -14,7 +14,7 @@ if requirements_file.exists():
 
 setup(
     name="synarete_wms",
-    version="0.1.82",
+    version="0.1.97",
     description="Warehouse Management System for Synarete Engineering Limited",
     author="Eveneth Beneth",
     author_email="benethemmanueli1701@gmail.com",

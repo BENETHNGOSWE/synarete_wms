@@ -154,6 +154,32 @@
       "create": 1,
       "print": 1,
       "submit": 1
+    },
+    {
+      "role": "WMS Engineer",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "print": 1
+    },
+    {
+      "role": "System Manager",
+      "permlevel": 1,
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "permlevel": 1,
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "Stock Manager",
+      "permlevel": 1,
+      "read": 1,
+      "write": 1
     }
   ],
   "sort_field": "consumption_date",

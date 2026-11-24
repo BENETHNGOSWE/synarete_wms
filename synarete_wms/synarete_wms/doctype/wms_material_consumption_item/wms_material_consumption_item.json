@@ -19,6 +19,7 @@
     "available_outstanding_qty",
     "outstanding_qty",
     "qty",
+    "expense_account",
     "uom",
     "serial_no",
     "remarks"
@@ -139,6 +140,15 @@
       "in_list_view": 1,
       "label": "New Consumed Quantity",
       "reqd": 1
+    },
+    {
+      "description": "Warehouse must choose this on Approve. Debited when stock is used. Prefills from the Item default.",
+      "fieldname": "expense_account",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Expense Account",
+      "options": "Account",
+      "permlevel": 1
     },
     {
       "fetch_from": "item_code.stock_uom",

@@ -1,6 +1,26 @@
 frappe.ui.form.on("Site Work Order", {
+    onload(frm) {
+        if (!frm.is_new()) {
+            return;
+        }
+        const roles = warehouse_role_flags();
+        if (roles.can_engineer && !roles.can_warehouse && !frm.doc.engineer) {
+            frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then((r) => {
+                if (r && r.message && r.message.name) {
+                    frm.set_value("engineer", r.message.name);
+                }
+            });
+        }
+    },
+
     refresh(frm) {
         if (frm.is_new()) {
+            if (!frm.doc.engineer) {
+                frm.dashboard.set_headline_alert(
+                    __("Assign the Engineer who will do this job. They will see it when they log in."),
+                    "orange"
+                );
+            }
             return;
         }
 
@@ -24,18 +44,31 @@ frappe.ui.form.on("Site Work Order", {
         }
 
         if (frm.doc.status === "Pending Stock Review" && roles.can_warehouse) {
-            frm.add_custom_button(__("Approve"), () => {
-                frappe.confirm(
-                    __("Approve this work order for warehouse issue?"),
-                    () => apply_swo_action(frm, "Approve")
-                );
-            }, material);
-            frm.add_custom_button(__("Reject"), () => {
-                frappe.confirm(
-                    __("Reject this work order?"),
-                    () => apply_swo_action(frm, "Reject")
-                );
-            }, material);
+            const add_approve = (allow_self) => {
+                const is_owner = frm.doc.owner === frappe.session.user;
+                if (!allow_self && is_owner && !roles.is_system) {
+                    frm.dashboard.set_headline_alert(
+                        __("You created this work order. Another Warehouse or Stock Manager must Approve. Or tick Allow Self-Approve in WMS Settings."),
+                        "orange"
+                    );
+                } else {
+                    frm.add_custom_button(__("Approve"), () => {
+                        frappe.confirm(
+                            __("Approve this work order for warehouse issue?"),
+                            () => apply_swo_action(frm, "Approve")
+                        );
+                    }, material);
+                }
+                frm.add_custom_button(__("Reject"), () => {
+                    frappe.confirm(
+                        __("Reject this work order?"),
+                        () => apply_swo_action(frm, "Reject")
+                    );
+                }, material);
+            };
+            frappe.db.get_single_value("WMS Settings", "allow_self_approve").then((v) => {
+                add_approve(cint(v));
+            });
         }
 
         if (roles.can_warehouse && ["Approved", "Issued", "In Progress"].includes(frm.doc.status)) {
@@ -59,12 +92,11 @@ frappe.ui.form.on("Site Work Order", {
                 }, material);
 
                 frm.add_custom_button(__("Return Material"), () => {
-                    frappe.new_doc("Material Return Record", {
-                        material_type: "MP",
-                        installation_type: "New Installation",
+                    frappe.new_doc("WMS Material Closeout", {
+                        work_order_type: "Site Work Order",
+                        work_order: frm.doc.name,
                         site: frm.doc.site,
                         engineer: frm.doc.engineer,
-                        material_issue: frm.doc.material_issue,
                     });
                 }, material);
             }
@@ -87,13 +119,40 @@ frappe.ui.form.on("Site Work Order", {
             }, material);
         }
 
-        if (frm.doc.status === "In Progress" && (roles.can_engineer || roles.can_warehouse)) {
-            frm.add_custom_button(__("Complete Work Order"), () => {
-                frappe.confirm(
-                    __("Mark this Site Work Order as completed? Unused stock stays with the engineer until it is consumed or returned."),
-                    () => apply_swo_action(frm, "Complete")
-                );
-            }, material);
+        if (
+            ["Approved", "Issued", "In Progress"].includes(frm.doc.status)
+            && (roles.can_engineer || roles.can_warehouse)
+        ) {
+            const close_work_order = () => {
+                frappe.xcall(
+                    "synarete_wms.synarete_wms.utils.closeout.can_complete_work_order",
+                    {
+                        work_order_type: "Site Work Order",
+                        work_order: frm.doc.name,
+                    }
+                ).then((result) => {
+                    if (result && !cint(result.ok)) {
+                        frappe.confirm(
+                            __(result.message || "Return Material first."),
+                            () => {
+                                frappe.new_doc("WMS Material Closeout", {
+                                    work_order_type: "Site Work Order",
+                                    work_order: frm.doc.name,
+                                    site: frm.doc.site,
+                                    engineer: frm.doc.engineer,
+                                });
+                            }
+                        );
+                        return;
+                    }
+                    frappe.confirm(
+                        __("Close this Site Work Order? Status will be Closed."),
+                        () => apply_swo_action(frm, "Close Work Order")
+                    );
+                });
+            };
+            frm.add_custom_button(__("Close Work Order"), close_work_order);
+            frm.add_custom_button(__("Close Work Order"), close_work_order, material);
         }
     },
 

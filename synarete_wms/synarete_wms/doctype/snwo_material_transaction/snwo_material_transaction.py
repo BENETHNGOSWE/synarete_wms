@@ -4,6 +4,7 @@ from frappe.utils import today
 
 from synarete_wms.synarete_wms.utils.servicenow import (
     is_mp_transaction,
+    post_mp_stock_consume,
     post_mp_stock_issue,
     refresh_work_order_balances,
     related_work_orders,
@@ -42,16 +43,25 @@ class SNWOMaterialTransaction(Document):
             stock_entry = post_mp_stock_issue(self)
             if not (stock_entry or self.stock_entry):
                 frappe.throw(
-                    "MP Issue did not deduct warehouse stock (no Stock Entry). "
-                    "Set Company and Main Warehouse in WMS Settings, confirm the "
-                    "item exists, then submit again. For already-submitted issues "
-                    "use Material → Deduct MP Stock."
+                    "MP Issue did not move warehouse stock (no Stock Entry). "
+                    "Set Company, Main Warehouse and Field Issued Warehouse in "
+                    "WMS Settings, confirm the item exists, then submit again. "
+                    "For already-submitted issues use Material → Deduct MP Stock."
                 )
             frappe.msgprint(
-                f"Warehouse stock deducted on Stock Entry {self.stock_entry or stock_entry}.",
+                f"MP stock moved to Field Issued on {self.stock_entry or stock_entry} "
+                "(still inventory). Expense posts when you Consume.",
                 indicator="green",
                 alert=True,
             )
+        elif self.transaction_type == "Consume":
+            stock_entry = post_mp_stock_consume(self)
+            if stock_entry or self.stock_entry:
+                frappe.msgprint(
+                    f"Consumed MP stock posted on {self.stock_entry or stock_entry}.",
+                    indicator="green",
+                    alert=True,
+                )
         for work_order in related_work_orders(self):
             refresh_work_order_balances(work_order)
         if self.transaction_type == "Reconcile":

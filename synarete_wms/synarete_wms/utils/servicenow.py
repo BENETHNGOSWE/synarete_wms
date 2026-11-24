@@ -11,6 +11,10 @@ from datetime import datetime
 import frappe
 from frappe.utils import cint, flt, get_datetime, getdate, now_datetime, nowdate
 
+from synarete_wms.synarete_wms.utils.qty_rules import (
+    validate_reconcile_quantity,
+)
+
 
 CLOSED_STATUSES = {
     "Closed Complete",
@@ -285,9 +289,15 @@ def apply_derived_fields(doc):
     if doc.part_code and not doc.part_name:
         doc.part_name = frappe.db.get_value("Item", doc.part_code, "item_name")
     if doc.is_new() and not doc.assigned_to:
-        from synarete_wms.synarete_wms.utils.permissions import current_employee
+        from synarete_wms.synarete_wms.utils.permissions import (
+            can_issue_snwo_material,
+            current_employee,
+        )
 
-        doc.assigned_to = current_employee()
+        # Warehouse / Stock Manager creating a WO must pick the engineer.
+        # An engineer creating their own WO is filled automatically.
+        if not can_issue_snwo_material():
+            doc.assigned_to = current_employee()
 
 
 def ensure_material_row_from_header(doc):
@@ -331,6 +341,7 @@ def _blank_totals():
         "qty_interchanged_out": 0,
         "qty_interchanged_in": 0,
         "qty_mp_issued": 0,
+        "qty_returned": 0,
         "qty_issued_from_received": 0,
         "qty_remaining": 0,
         "qty_warehouse_remaining": 0,
@@ -464,6 +475,33 @@ def collect_material_totals(work_order):
                 or txn.original_work_order == work_order
             ):
                 bucket(item_code)["qty_consumed"] += qty
+            elif txn.transaction_type == "Reconcile" and (
+                txn.issued_to_work_order == work_order
+                or txn.original_work_order == work_order
+            ):
+                bucket(item_code)["qty_returned"] += qty
+
+    if frappe.db.exists("DocType", "WMS Material Closeout"):
+        closeouts = frappe.get_all(
+            "WMS Material Closeout",
+            filters={
+                "work_order_type": "ServiceNow Site Work Order",
+                "work_order": work_order,
+                "docstatus": 1,
+            },
+            pluck="name",
+        )
+        for closeout_name in closeouts:
+            closeout = frappe.get_doc("WMS Material Closeout", closeout_name)
+            for row in closeout.items or []:
+                item_code = row.item_code
+                current = bucket(item_code)
+                current["qty_consumed"] = max(
+                    current["qty_consumed"], flt(row.used_qty)
+                )
+                current["qty_returned"] = max(
+                    current["qty_returned"], flt(row.returned_unused_qty)
+                )
 
     for current in totals.values():
         current["qty_warehouse_remaining"] = max(
@@ -495,7 +533,8 @@ def collect_material_totals(work_order):
             current["qty_issued"]
             - current["qty_consumed"]
             - sent_from_issued
-            - current["qty_interchanged_in"],
+            - current["qty_interchanged_in"]
+            - current.get("qty_returned", 0),
         )
 
     return totals
@@ -526,6 +565,8 @@ def refresh_work_order_balances(work_order):
         row.qty_received = flt(current["qty_received"])
         row.qty_issued = flt(current["qty_issued"])
         row.qty_consumed = flt(current["qty_consumed"])
+        if row.meta.has_field("qty_returned"):
+            row.qty_returned = flt(current.get("qty_returned") or 0)
         row.qty_interchanged_out = flt(current["qty_interchanged_out"])
         row.qty_interchanged_in = flt(current["qty_interchanged_in"])
         row.qty_mp_issued = flt(current["qty_mp_issued"])
@@ -545,6 +586,8 @@ def refresh_work_order_balances(work_order):
         row.qty_received = flt(current["qty_received"])
         row.qty_issued = flt(current["qty_issued"])
         row.qty_consumed = flt(current["qty_consumed"])
+        if row.meta.has_field("qty_returned"):
+            row.qty_returned = flt(current.get("qty_returned") or 0)
         row.qty_interchanged_out = flt(current["qty_interchanged_out"])
         row.qty_interchanged_in = flt(current["qty_interchanged_in"])
         row.qty_mp_issued = flt(current["qty_mp_issued"])
@@ -805,13 +848,26 @@ def validate_transaction(doc):
                     f"Remaining issued quantity on {issued_to} is {remaining}.{extra}"
                 )
 
+    if doc.transaction_type == "Reconcile":
+        totals = collect_material_totals(issued_to)
+        for row in doc.items:
+            key = _canonical_item_code(
+                row.item_code,
+                getattr(row, "item_name", None),
+                issued_to,
+            )
+            remaining = flt(totals.get(_item_key(key), {}).get("qty_remaining"))
+            error = validate_reconcile_quantity(row.qty, remaining)
+            if error:
+                frappe.throw(f"{row.item_code}: {error}")
+
 
 def is_mp_transaction(doc):
     return cint(getattr(doc, "is_mp_stock", 0)) or doc.transaction_type == "MP Issue"
 
 
 def post_mp_stock_issue(doc, force=False):
-    """Deduct company MP stock from the warehouse stock ledger."""
+    """Move MP stock Main → Field Issued (still inventory). Expense on Consume."""
     if not force and not is_mp_transaction(doc):
         return None
     if doc.get("stock_entry"):
@@ -821,8 +877,11 @@ def post_mp_stock_issue(doc, force=False):
 
     settings = frappe.get_single("WMS Settings")
     warehouse = doc.warehouse or settings.main_warehouse
+    field_issued = settings.field_issued_warehouse
     if not warehouse:
         frappe.throw("Set the Warehouse on the MP issue, or Main Warehouse in WMS Settings.")
+    if not field_issued:
+        frappe.throw("Set Field Issued Warehouse in WMS Settings before issuing MP stock.")
     if not settings.company:
         frappe.throw("Set Company in WMS Settings before issuing MP stock.")
 
@@ -843,7 +902,7 @@ def post_mp_stock_issue(doc, force=False):
         if not item_code:
             frappe.throw(
                 f"{doc.name}: item code is missing on a material line. "
-                "Warehouse stock was not deducted."
+                "Warehouse stock was not moved."
             )
         items.append(
             {
@@ -853,13 +912,83 @@ def post_mp_stock_issue(doc, force=False):
             }
         )
     if not items:
-        frappe.throw(f"{doc.name} has no material lines to deduct from warehouse stock.")
+        frappe.throw(f"{doc.name} has no material lines to move from warehouse stock.")
 
-    from synarete_wms.synarete_wms.utils.stock import create_material_issue
+    from synarete_wms.synarete_wms.utils.stock import create_material_transfer
+
+    stock_entry = create_material_transfer(
+        items=items,
+        source_warehouse=warehouse,
+        target_warehouse=field_issued,
+        company=settings.company,
+        reference_doctype=doc.doctype,
+        reference_name=doc.name,
+        site=doc.site,
+        engineer=engineer,
+    )
+    doc.db_set("stock_entry", stock_entry.name, update_modified=False)
+    doc.db_set("warehouse", warehouse, update_modified=False)
+    if not cint(doc.is_mp_stock):
+        doc.db_set("is_mp_stock", 1, update_modified=False)
+        doc.is_mp_stock = 1
+    return stock_entry.name
+
+
+def post_mp_stock_consume(doc):
+    """Expense only the consumed MP qty from Field Issued (same as Site Work Order)."""
+    if not doc or doc.transaction_type != "Consume":
+        return None
+    if doc.get("stock_entry"):
+        return doc.stock_entry
+    if cint(doc.docstatus) == 2:
+        return None
+
+    settings = frappe.get_single("WMS Settings")
+    field_issued = settings.field_issued_warehouse
+    if not field_issued or not settings.company:
+        return None
+
+    from synarete_wms.synarete_wms.utils.stock import (
+        create_material_issue,
+        get_available_qty,
+        get_item_expense_account,
+    )
+
+    work_order = doc.issued_to_work_order or doc.original_work_order
+    engineer = frappe.db.get_value(
+        "ServiceNow Site Work Order",
+        work_order,
+        "assigned_to",
+    )
+    items = []
+    for row in doc.items or []:
+        item_code = _canonical_item_code(
+            row.item_code,
+            getattr(row, "item_name", None),
+            work_order,
+        )
+        if not item_code:
+            continue
+        available = flt(get_available_qty(item_code, field_issued))
+        qty = min(flt(row.qty), available)
+        if qty <= 0:
+            continue
+        items.append(
+            {
+                "item_code": item_code,
+                "qty": qty,
+                "uom": row.uom,
+                "expense_account": get_item_expense_account(
+                    item_code, settings.company
+                ),
+            }
+        )
+    if not items:
+        return None
 
     stock_entry = create_material_issue(
         items=items,
-        source_warehouse=warehouse,
+        source_warehouse=field_issued,
         company=settings.company,
         reference_doctype=doc.doctype,
         reference_name=doc.name,
@@ -867,15 +996,10 @@ def post_mp_stock_issue(doc, force=False):
         engineer=engineer,
         posting_date=doc.posting_date,
         remarks=(
-            f"ServiceNow MP issue {doc.name} for work order {work_order}. "
-            "Client payback stock."
+            f"ServiceNow MP consume {doc.name} for work order {work_order}."
         ),
     )
     doc.db_set("stock_entry", stock_entry.name, update_modified=False)
-    doc.db_set("warehouse", warehouse, update_modified=False)
-    if not cint(doc.is_mp_stock):
-        doc.db_set("is_mp_stock", 1, update_modified=False)
-        doc.is_mp_stock = 1
     return stock_entry.name
 
 
@@ -978,10 +1102,15 @@ def upsert_servicenow_work_order(payload):
     ensure_material_row_from_header(doc)
     if not doc.process_status:
         doc.process_status = "Created"
-    if existing:
-        doc.save(ignore_permissions=True)
-    else:
-        doc.insert(ignore_permissions=True)
+    previous_import = frappe.flags.get("snwo_import")
+    frappe.flags.snwo_import = True
+    try:
+        if existing:
+            doc.save(ignore_permissions=True, ignore_mandatory=True)
+        else:
+            doc.insert(ignore_permissions=True, ignore_mandatory=True)
+    finally:
+        frappe.flags.snwo_import = previous_import
     return doc.name
 
 
@@ -1036,6 +1165,9 @@ def complete_work_order(name):
 
     if can_issue_snwo_material():
         post_missing_mp_stock(name)
+    from synarete_wms.synarete_wms.utils.closeout import assert_work_order_reconciled
+
+    assert_work_order_reconciled("ServiceNow Site Work Order", name)
     doc = frappe.get_doc("ServiceNow Site Work Order", name)
     doc.process_status = "Completed"
     doc.save(ignore_permissions=True)

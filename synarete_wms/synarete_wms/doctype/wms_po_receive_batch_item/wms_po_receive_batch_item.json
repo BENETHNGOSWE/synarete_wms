@@ -1,0 +1,98 @@
+{
+  "custom": 0,
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "po_detail",
+    "item_code",
+    "item_name",
+    "uom",
+    "ordered_qty",
+    "previously_received_qty",
+    "outstanding_qty",
+    "batch_qty",
+    "rate",
+    "fulfillment_source"
+  ],
+  "fields": [
+    {
+      "fieldname": "po_detail",
+      "fieldtype": "Data",
+      "hidden": 1,
+      "label": "PO Item"
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fetch_from": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "ordered_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Ordered",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "previously_received_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Already Received",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "outstanding_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Outstanding",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "batch_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "This Batch",
+      "reqd": 1
+    },
+    {
+      "fieldname": "rate",
+      "fieldtype": "Currency",
+      "label": "Rate",
+      "read_only": 1
+    },
+    {
+      "default": "This Purchase Order",
+      "fieldname": "fulfillment_source",
+      "fieldtype": "Select",
+      "label": "Fulfills",
+      "options": "This Purchase Order\nPrevious Outstanding PO",
+      "read_only": 1
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "WMS PO Receive Batch Item"
+}

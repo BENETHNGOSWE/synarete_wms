@@ -1,0 +1,113 @@
+{
+  "custom": 0,
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "item_code",
+    "item_name",
+    "issued_qty",
+    "previously_used_qty",
+    "previously_returned_qty",
+    "used_qty",
+    "returned_unused_qty",
+    "shortfall_qty",
+    "shortfall_reason",
+    "uom",
+    "accountability",
+    "material_issue"
+  ],
+  "fields": [
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "hidden": 1,
+      "label": "Item Code",
+      "options": "Item",
+      "print_hide": 1
+    },
+    {
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "issued_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Issued",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "previously_used_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Already Used",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "previously_returned_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Already Returned",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "description": "Cumulative total used to date, including earlier consumption. Used material is not sent back to the warehouse.",
+      "fieldname": "used_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Used (not in warehouse)"
+    },
+    {
+      "default": "0",
+      "description": "Cumulative unused total physically returned to Main Warehouse. Do not enter used material here or reduce below Already Returned.",
+      "fieldname": "returned_unused_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Unused (back to warehouse)"
+    },
+    {
+      "default": "0",
+      "fieldname": "shortfall_qty",
+      "fieldtype": "Float",
+      "label": "Not Accounted",
+      "read_only": 1
+    },
+    {
+      "description": "Required if Used + Unused is less than Issued (e.g. 6 of 10).",
+      "fieldname": "shortfall_reason",
+      "fieldtype": "Small Text",
+      "label": "Reason if less than issued"
+    },
+    {
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "fieldname": "accountability",
+      "fieldtype": "Link",
+      "label": "Accountability",
+      "options": "WMS Material Accountability",
+      "read_only": 1
+    },
+    {
+      "fieldname": "material_issue",
+      "fieldtype": "Link",
+      "label": "Material Issue",
+      "options": "WMS Material Issue",
+      "read_only": 1
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "WMS Material Closeout Item"
+}

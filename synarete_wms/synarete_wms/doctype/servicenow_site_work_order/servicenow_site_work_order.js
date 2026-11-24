@@ -5,11 +5,15 @@ frappe.ui.form.on("ServiceNow Site Work Order", {
             frm.set_value("awaiting_warehouse_issue", 1);
         }
         if (frm.is_new() && !frm.doc.assigned_to) {
-            frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then((r) => {
-                if (r && r.message && r.message.name) {
-                    frm.set_value("assigned_to", r.message.name);
-                }
-            });
+            const roles = snwo_role_flags();
+            // Warehouse creating a job must pick the engineer. Engineers fill themselves.
+            if (roles.can_engineer && !roles.can_issue) {
+                frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then((r) => {
+                    if (r && r.message && r.message.name) {
+                        frm.set_value("assigned_to", r.message.name);
+                    }
+                });
+            }
         }
     },
 
@@ -18,6 +22,12 @@ frappe.ui.form.on("ServiceNow Site Work Order", {
         toggle_part_fields(frm);
 
         if (frm.is_new()) {
+            if (!frm.doc.assigned_to) {
+                frm.dashboard.set_headline_alert(
+                    __("Assign the Engineer who will do this job. They will see it when they log in."),
+                    "orange"
+                );
+            }
             return;
         }
 
@@ -92,7 +102,7 @@ frappe.ui.form.on("ServiceNow Site Work Order", {
             }, __("Material"));
         }
 
-        if (roles.can_engineer) {
+        if (roles.can_engineer || roles.can_issue) {
             frm.add_custom_button(__("Consume Material"), () => {
                 const warehouse_left = (frm.doc.materials || []).some(
                     (row) => flt(row.qty_warehouse_remaining) > 0
@@ -120,25 +130,55 @@ frappe.ui.form.on("ServiceNow Site Work Order", {
                 open_transaction("Consume");
             }, __("Material"));
 
-            frm.add_custom_button(__("Reconcile"), () => {
-                open_transaction("Reconcile");
-            }, __("Material"));
+            const has_unconsumed_issued_material = (frm.doc.materials || []).some(
+                (row) => flt(row.qty_remaining) > 0
+            );
+            if (has_unconsumed_issued_material) {
+                frm.add_custom_button(__("Reconcile Unused"), () => {
+                    open_transaction("Reconcile");
+                }, __("Material"));
+            }
 
             frm.add_custom_button(__("Request Extra Material"), () => {
                 open_transaction("Request");
             }, __("Material"));
 
+            frm.add_custom_button(__("Return Material"), () => {
+                frappe.new_doc("WMS Material Closeout", {
+                    work_order_type: "ServiceNow Site Work Order",
+                    work_order: frm.doc.name,
+                    site: frm.doc.site,
+                    engineer: frm.doc.assigned_to,
+                });
+            }, __("Material"));
+
             if (frm.doc.process_status !== "Completed") {
                 frm.add_custom_button(__("Complete Work Order"), () => {
-                    frappe.confirm(
-                        __("Mark this ServiceNow Site Work Order as completed?"),
-                        () => {
-                            frappe.xcall(
-                                "synarete_wms.synarete_wms.utils.servicenow.complete_work_order",
-                                { name: frm.doc.name }
-                            ).then(() => frm.reload_doc());
+                    frappe.xcall(
+                        "synarete_wms.synarete_wms.utils.closeout.can_complete_work_order",
+                        {
+                            work_order_type: "ServiceNow Site Work Order",
+                            work_order: frm.doc.name,
                         }
-                    );
+                    ).then((result) => {
+                        if (result && !cint(result.ok)) {
+                            frappe.msgprint({
+                                title: __("Material Closeout required"),
+                                indicator: "red",
+                                message: result.message,
+                            });
+                            return;
+                        }
+                        frappe.confirm(
+                            __("Mark this ServiceNow Site Work Order as completed?"),
+                            () => {
+                                frappe.xcall(
+                                    "synarete_wms.synarete_wms.utils.servicenow.complete_work_order",
+                                    { name: frm.doc.name }
+                                ).then(() => frm.reload_doc());
+                            }
+                        );
+                    });
                 }, __("Material"));
             }
         }

@@ -1,0 +1,49 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "default": "Today",
+      "fieldname": "deadline_month",
+      "fieldtype": "Date",
+      "label": "Deadline Month",
+      "reqd": 1
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "fieldname": "site_work_order",
+      "fieldtype": "Link",
+      "label": "Site Work Order",
+      "options": "Site Work Order"
+    },
+    {
+      "fieldname": "servicenow_work_order",
+      "fieldtype": "Link",
+      "label": "ServiceNow Work Order",
+      "options": "ServiceNow Site Work Order"
+    },
+    {
+      "fieldname": "return_status",
+      "fieldtype": "Select",
+      "label": "Return Status",
+      "options": "\nPending\nPartially Returned\nReturned\nReturned Late\nOverdue\nCompletion Date Missing"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "HTT Monthly Return Tracker",
+  "ref_doctype": "Site Work Order",
+  "report_name": "HTT Monthly Return Tracker",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "Stock Manager"},
+    {"role": "Warehouse Manager"},
+    {"role": "WMS Viewer"},
+    {"role": "System Manager"}
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

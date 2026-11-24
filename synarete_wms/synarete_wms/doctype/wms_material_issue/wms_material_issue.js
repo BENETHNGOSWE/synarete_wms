@@ -10,6 +10,8 @@ frappe.ui.form.on("WMS Material Issue", {
 
         if (frm.doc.site_work_order) {
             load_site_work_order(frm);
+        } else if (frm.doc.servicenow_work_order) {
+            load_servicenow_work_order(frm);
         }
     },
 
@@ -19,6 +21,8 @@ frappe.ui.form.on("WMS Material Issue", {
 
         if (frm.is_new() && frm.doc.site_work_order) {
             load_site_work_order(frm);
+        } else if (frm.is_new() && frm.doc.servicenow_work_order) {
+            load_servicenow_work_order(frm);
         }
 
         if (!frm.is_new() && frm.doc.docstatus === 0) {
@@ -136,11 +140,24 @@ frappe.ui.form.on("WMS Material Issue", {
             });
 
             frm.refresh_field("items");
+            if (frm.doc.servicenow_work_order) {
+                load_servicenow_work_order(frm);
+            }
         });
     },
 
     site_work_order(frm) {
+        if (frm.doc.site_work_order && frm.doc.servicenow_work_order) {
+            frm.set_value("servicenow_work_order", "");
+        }
         load_site_work_order(frm);
+    },
+
+    servicenow_work_order(frm) {
+        if (frm.doc.servicenow_work_order && frm.doc.site_work_order) {
+            frm.set_value("site_work_order", "");
+        }
+        load_servicenow_work_order(frm);
     },
 });
 
@@ -191,6 +208,54 @@ frappe.ui.form.on("WMS Material Issue Item", {
         recalculate_mp_row(frm, row);
     },
 });
+
+function load_servicenow_work_order(frm) {
+    const work_order_name = frm.doc.servicenow_work_order;
+    if (!work_order_name) return;
+    if (frm.doc.material_type && frm.doc.material_type !== "HTT") {
+        frappe.msgprint(
+            __("ServiceNow work-order tracking is available for HTT-only material issues.")
+        );
+        return;
+    }
+    if (frm.__wms_loading_servicenow_work_order === work_order_name) return;
+    frm.__wms_loading_servicenow_work_order = work_order_name;
+
+    frappe.db.get_doc(
+        "ServiceNow Site Work Order",
+        work_order_name
+    ).then((work_order) => {
+        if (frm.doc.servicenow_work_order !== work_order_name) return;
+        if (frm.doc.site && frm.doc.site !== work_order.site) {
+            frappe.msgprint(
+                __("The selected HTT receipt/site does not match this ServiceNow Work Order. Choose a matching receipt.")
+            );
+            return;
+        }
+        if (
+            frm.doc.engineer
+            && work_order.assigned_to
+            && frm.doc.engineer !== work_order.assigned_to
+        ) {
+            frappe.msgprint(
+                __("The selected HTT receipt's engineer does not match this ServiceNow Work Order.")
+            );
+            return;
+        }
+
+        if (!frm.doc.material_type) {
+            frm.set_value("material_type", "HTT");
+        }
+        frm.set_value("site", work_order.site);
+        if (!frm.doc.engineer && work_order.assigned_to) {
+            frm.set_value("engineer", work_order.assigned_to);
+        }
+    }).finally(() => {
+        if (frm.__wms_loading_servicenow_work_order === work_order_name) {
+            frm.__wms_loading_servicenow_work_order = null;
+        }
+    });
+}
 
 function load_site_work_order(frm) {
     const work_order_name = frm.doc.site_work_order;

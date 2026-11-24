@@ -13,6 +13,8 @@ WMS_ROLES = [
 def after_migrate():
     ensure_roles()
     ensure_custom_fields()
+    ensure_wms_doctype_modules()
+    refresh_site_work_order_engineer_names()
     ensure_snwo_engineer_link_permissions()
     ensure_snwo_status_and_list_sort()
     ensure_workflows()
@@ -20,6 +22,69 @@ def after_migrate():
     ensure_print_formats()
     ensure_maintenance_partners()
     refresh_snwo_quantities()
+
+
+def ensure_wms_doctype_modules():
+    """DocTypes must live in Synarete WMS, never Core (frappe.core.doctype.*)."""
+    names = [
+        "WMS PO Receive Batch",
+        "WMS PO Receive Batch Item",
+        "WMS Material Closeout",
+        "WMS Material Closeout Item",
+        "WMS HTT Return Batch",
+        "WMS HTT Return Batch Item",
+    ]
+    for name in names:
+        if not frappe.db.exists("DocType", name):
+            continue
+        frappe.db.set_value("DocType", name, "module", "Synarete WMS", update_modified=False)
+        frappe.db.set_value("DocType", name, "custom", 0, update_modified=False)
+    frappe.clear_cache()
+    for dt in (
+        "wms_po_receive_batch_item",
+        "wms_po_receive_batch",
+        "wms_material_closeout_item",
+        "wms_material_closeout",
+        "wms_htt_return_batch_item",
+        "wms_htt_return_batch",
+    ):
+        try:
+            frappe.reload_doc("Synarete WMS", "doctype", dt, force=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"reload {dt}")
+
+
+def refresh_site_work_order_engineer_names():
+    """Backfill the read-only engineer display name used by the Site WO list."""
+    if not frappe.db.exists("DocType", "Site Work Order"):
+        return
+    if not frappe.get_meta("Site Work Order").has_field("engineer_name"):
+        return
+
+    work_orders = frappe.get_all(
+        "Site Work Order",
+        fields=["name", "engineer", "engineer_name"],
+    )
+    employee_ids = {row.engineer for row in work_orders if row.engineer}
+    employee_names = {
+        employee_id: frappe.db.get_value(
+            "Employee", employee_id, "employee_name"
+        )
+        for employee_id in employee_ids
+    }
+
+    for row in work_orders:
+        if not row.engineer:
+            continue
+        display_name = employee_names.get(row.engineer) or row.engineer
+        if row.engineer_name != display_name:
+            frappe.db.set_value(
+                "Site Work Order",
+                row.name,
+                "engineer_name",
+                display_name,
+                update_modified=False,
+            )
 
 
 def refresh_snwo_quantities():

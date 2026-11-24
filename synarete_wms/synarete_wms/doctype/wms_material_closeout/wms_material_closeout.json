@@ -1,0 +1,177 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:WCL-{YYYY}-{#####}",
+  "creation": "2026-11-02 00:00:00.000000",
+  "custom": 0,
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "work_order_type",
+    "work_order",
+    "site",
+    "engineer",
+    "posting_date",
+    "returned_by",
+    "items_section",
+    "items",
+    "consume_stock_entry",
+    "return_stock_entry",
+    "notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "work_order_type",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Work Order Type",
+      "options": "Site Work Order\nServiceNow Site Work Order",
+      "reqd": 1
+    },
+    {
+      "fieldname": "work_order",
+      "fieldtype": "Dynamic Link",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Work Order",
+      "options": "work_order_type",
+      "reqd": 1
+    },
+    {
+      "fieldname": "site",
+      "fieldtype": "Link",
+      "label": "Site",
+      "options": "WMS Site"
+    },
+    {
+      "fieldname": "engineer",
+      "fieldtype": "Link",
+      "label": "Engineer",
+      "options": "Employee"
+    },
+    {
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Return Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "returned_by",
+      "fieldtype": "Link",
+      "label": "Returned By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Return: Used and/or Unused (issued items only)"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "WMS Material Closeout Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "consume_stock_entry",
+      "fieldtype": "Link",
+      "label": "Used Material Stock Entry",
+      "options": "Stock Entry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "return_stock_entry",
+      "fieldtype": "Link",
+      "label": "Unused Return Stock Entry",
+      "options": "Stock Entry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "WMS Material Closeout",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "module": "Synarete WMS",
+  "name": "WMS Material Closeout",
+  "permissions": [
+    {
+      "amend": 1,
+      "cancel": 1,
+      "create": 1,
+      "delete": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "cancel": 1,
+      "create": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Warehouse Manager",
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "cancel": 1,
+      "create": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Stock Manager",
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "role": "Stock User",
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "print": 1,
+      "read": 1,
+      "role": "WMS Engineer",
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "print": 1,
+      "read": 1,
+      "role": "Employee",
+      "submit": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}
