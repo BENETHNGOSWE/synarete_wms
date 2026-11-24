@@ -1,3 +1,4 @@
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import frappe
@@ -39,3 +40,41 @@ class TestSiteWorkOrder(FrappeTestCase):
 
         self.assertIn("request may still be submitted", work_order.outstanding_material_notice)
         self.assertIn("TEST-ITEM: 30.0 unit(s) outstanding", work_order.outstanding_material_notice)
+
+    def test_approval_persists_default_and_reduced_approved_quantities(self):
+        from synarete_wms.synarete_wms.utils.workflow_api import (
+            _prepare_site_work_order_approval,
+        )
+
+        document = SimpleNamespace(
+            materials=[
+                SimpleNamespace(item_code="TEST-WMS-17", qty=10, approved_qty=0),
+                SimpleNamespace(item_code="TEST-WMS-18", qty=8, approved_qty=5),
+            ]
+        )
+        with patch("frappe.session") as session, patch(
+            "synarete_wms.synarete_wms.utils.workflow_api.today",
+            return_value="2026-09-01",
+        ):
+            session.user = "reviewer@example.test"
+            _prepare_site_work_order_approval(document)
+
+        self.assertEqual(document.materials[0].approved_qty, 10)
+        self.assertEqual(document.materials[1].approved_qty, 5)
+        self.assertEqual(document.reviewed_by, "reviewer@example.test")
+        self.assertEqual(document.review_date, "2026-09-01")
+
+    def test_approval_rejects_quantity_above_request(self):
+        from synarete_wms.synarete_wms.utils.workflow_api import (
+            _prepare_site_work_order_approval,
+        )
+
+        document = SimpleNamespace(
+            materials=[
+                SimpleNamespace(item_code="TEST-WMS-17", qty=5, approved_qty=6)
+            ]
+        )
+        with patch("frappe.session") as session:
+            session.user = "reviewer@example.test"
+            with self.assertRaises(frappe.ValidationError):
+                _prepare_site_work_order_approval(document)

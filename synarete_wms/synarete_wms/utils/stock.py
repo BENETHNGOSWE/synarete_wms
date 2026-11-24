@@ -86,6 +86,39 @@ def create_material_transfer(
     return stock_entry
 
 
+@frappe.whitelist()
+def get_item_expense_account(item_code, company=None):
+    """Item Default / Item / WMS Settings — never query a missing Item field."""
+    if not item_code:
+        return None
+    if not company:
+        company = frappe.db.get_single_value("WMS Settings", "company")
+    account = None
+    if company:
+        account = frappe.db.get_value(
+            "Item Default",
+            {"parent": item_code, "company": company},
+            "expense_account",
+        )
+    if not account:
+        account = frappe.db.get_value(
+            "Item Default",
+            {"parent": item_code},
+            "expense_account",
+        )
+    item_meta = frappe.get_meta("Item")
+    if not account and item_meta.has_field("expense_account"):
+        account = frappe.db.get_value("Item", item_code, "expense_account")
+    if not account:
+        try:
+            account = frappe.db.get_single_value(
+                "WMS Settings", "consume_expense_account"
+            )
+        except Exception:
+            account = None
+    return account
+
+
 def create_material_issue(
     items,
     source_warehouse,
@@ -110,9 +143,17 @@ def create_material_issue(
         stock_entry.set_posting_time = 1
     if remarks and stock_entry.meta.get_field("remarks"):
         stock_entry.remarks = remarks
-    expense_account = frappe.get_cached_value(
-        "Company", company, "stock_adjustment_account"
-    ) or frappe.get_cached_value("Company", company, "default_expense_account")
+    expense_account = None
+    try:
+        expense_account = frappe.db.get_single_value(
+            "WMS Settings", "consume_expense_account"
+        )
+    except Exception:
+        expense_account = None
+    if not expense_account:
+        expense_account = frappe.get_cached_value(
+            "Company", company, "stock_adjustment_account"
+        ) or frappe.get_cached_value("Company", company, "default_expense_account")
     if expense_account and stock_entry.meta.get_field("expense_account"):
         stock_entry.expense_account = expense_account
 
@@ -140,8 +181,9 @@ def create_material_issue(
                 "batch_no": item.get("batch_no"),
             },
         )
-        if expense_account and row.meta.get_field("expense_account"):
-            row.expense_account = expense_account
+        row_expense = item.get("expense_account") or expense_account
+        if row_expense and row.meta.get_field("expense_account"):
+            row.expense_account = row_expense
 
         basic_rate = flt(item.get("basic_rate"))
         if not basic_rate:
@@ -230,92 +272,12 @@ def cancel_linked_stock_entry(stock_entry_name):
 
 
 def on_purchase_receipt_submit(doc, method=None):
-    """Update Purchase Order delivery totals after a Purchase Receipt."""
-    purchase_order = doc.get("purchase_order")
-    if not purchase_order and doc.items:
-        purchase_order = doc.items[0].get("purchase_order")
+    """Kept for compatibility; PO batch totals live in po_receive."""
+    from synarete_wms.synarete_wms.utils.po_receive import (
+        on_purchase_receipt_submit as _update,
+    )
 
-    if not purchase_order:
-        return
-
-    po = frappe.get_doc("Purchase Order", purchase_order)
-    if not po.meta.get_field("custom_wms_total_received_qty"):
-        return
-
-    existing_receipts = []
-    for phase in po.get("custom_wms_delivery_phases") or []:
-        if phase.purchase_receipt:
-            existing_receipts.append(phase.purchase_receipt)
-
-    if doc.name in existing_receipts:
-        return
-
-    ordered_by_item = {}
-    item_names = {}
-
-    for item in po.items:
-        ordered_by_item[item.item_code] = (
-            ordered_by_item.get(item.item_code, 0) + flt(item.qty)
-        )
-        item_names[item.item_code] = item.item_name
-
-    received_by_item = {}
-    for item in doc.items:
-        received_by_item[item.item_code] = (
-            received_by_item.get(item.item_code, 0) + flt(item.qty)
-        )
-
-    total_ordered = 0
-    total_received = 0
-
-    for item_code in ordered_by_item:
-        total_ordered += ordered_by_item[item_code]
-
-        received_so_far = 0
-        for phase in po.get("custom_wms_delivery_phases") or []:
-            if phase.item_code == item_code:
-                received_so_far += flt(phase.phase_qty)
-
-        total_received += received_so_far
-
-    for item_code in received_by_item:
-        if item_code not in ordered_by_item:
-            frappe.throw(
-                f"Item {item_code} was not found on Purchase Order {po.name}."
-            )
-
-        phase_qty = received_by_item[item_code]
-        previous_received = 0
-
-        for phase in po.get("custom_wms_delivery_phases") or []:
-            if phase.item_code == item_code:
-                previous_received += flt(phase.phase_qty)
-
-        cumulative = previous_received + phase_qty
-        remaining = max(0, ordered_by_item[item_code] - cumulative)
-
-        po.append(
-            "custom_wms_delivery_phases",
-            {
-                "item_code": item_code,
-                "phase_date": doc.posting_date or today(),
-                "ordered_qty": ordered_by_item[item_code],
-                "phase_qty": phase_qty,
-                "cumulative_qty": cumulative,
-                "remaining_qty": remaining,
-                "purchase_receipt": doc.name,
-                "supplier": doc.supplier,
-            },
-        )
-
-        total_received += phase_qty
-
-    po.custom_wms_total_ordered_qty = total_ordered
-    po.custom_wms_total_received_qty = total_received
-    po.custom_wms_remaining_qty = max(0, total_ordered - total_received)
-
-    po.flags.ignore_validate_update_after_submit = True
-    po.save(ignore_permissions=True)
+    return _update(doc, method)
 
 
 def on_delivery_note_submit(doc, method=None):

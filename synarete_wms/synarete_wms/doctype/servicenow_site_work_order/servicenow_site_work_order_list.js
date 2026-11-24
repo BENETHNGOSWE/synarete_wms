@@ -15,6 +15,64 @@ frappe.listview_settings["ServiceNow Site Work Order"] = {
                 + "`tabServiceNow Site Work Order`.`creation` desc";
             return args;
         };
+        const bulk_approval_roles = [
+            "Stock Manager",
+            "Warehouse Manager",
+            "System Manager",
+        ];
+        if ((frappe.user_roles || []).some((role) => bulk_approval_roles.includes(role))) {
+            listview.page.add_inner_button(__("Approve Selected"), () => {
+                const checked = listview.get_checked_items() || [];
+                const names = checked
+                    .map((item) => typeof item === "string" ? item : item && item.name)
+                    .filter(Boolean);
+                if (!names.length) {
+                    frappe.msgprint(__("Select one or more ServiceNow Work Orders first."));
+                    return;
+                }
+
+                frappe.confirm(
+                    __(
+                        `Approve ${names.length} selected ServiceNow Work Order(s)? `
+                        + "Each order will use its existing WMS Approve action. "
+                        + "Imported work orders are never approved automatically."
+                    ),
+                    () => {
+                        frappe.call({
+                            method: "synarete_wms.synarete_wms.utils.workflow_api.bulk_approve_servicenow_work_orders",
+                            args: { work_orders: names },
+                            freeze: true,
+                            freeze_message: __("Approving selected ServiceNow work orders..."),
+                        }).then((response) => {
+                            const result = (response && response.message) || {};
+                            const approved = result.approved || [];
+                            const failed = result.failed || [];
+                            const escape_html = (value) => String(value || "")
+                                .replace(/&/g, "&amp;")
+                                .replace(/</g, "&lt;")
+                                .replace(/>/g, "&gt;")
+                                .replace(/"/g, "&quot;")
+                                .replace(/'/g, "&#39;");
+                            const details = failed.map((row) =>
+                                `${escape_html(row.name)}: ${escape_html(row.reason)}`
+                            ).join("<br>");
+                            const message = failed.length
+                                ? `${__("Approved")}: ${approved.length}<br>`
+                                    + `${__("Not approved")}: ${failed.length}<br><br>${details}`
+                                : `${__("Approved")}: ${approved.length}`;
+
+                            frappe.msgprint({
+                                title: __("Bulk Approval Result"),
+                                indicator: failed.length ? "orange" : "green",
+                                message: message,
+                            });
+                            listview.refresh();
+                        });
+                    }
+                );
+            });
+        }
+
         if (!listview.filter_area) return;
         const roles = frappe.user_roles || [];
         const is_wm = roles.includes("Warehouse Manager") || roles.includes("Stock Manager");
@@ -23,6 +81,19 @@ frappe.listview_settings["ServiceNow Site Work Order"] = {
                 listview.filter_area.add([
                     [listview.doctype, "awaiting_warehouse_issue", "=", 1],
                 ]);
+            });
+        } else {
+            listview.page.add_inner_button(__("My Work Orders"), () => {
+                frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then((r) => {
+                    const employee = r && r.message && r.message.name;
+                    if (!employee) {
+                        frappe.msgprint(__("Link your User ID on the Employee record to see assigned jobs."));
+                        return;
+                    }
+                    listview.filter_area.add([
+                        [listview.doctype, "assigned_to", "=", employee],
+                    ]);
+                });
             });
         }
     },

@@ -16,17 +16,37 @@ WORKFLOWS = [
             ("Issued", 0, "Stock User"),
             ("In Progress", 0, "Stock User"),
             ("Completed", 1, "Stock User"),
+            ("Closed", 1, "Stock User"),
             ("Cancelled", 2, "Stock Manager"),
         ],
         "transitions": [
             ("Draft", "Submit", "Pending Stock Review", "Stock User", None),
             ("Draft", "Submit", "Pending Stock Review", "Employee", None),
             ("Pending Stock Review", "Approve", "Approved", "Stock Manager", None),
+            ("Pending Stock Review", "Approve", "Approved", "Warehouse Manager", None),
+            ("Pending Stock Review", "Approve", "Approved", "System Manager", None),
             ("Pending Stock Review", "Reject", "Rejected", "Stock Manager", None),
+            ("Pending Stock Review", "Reject", "Rejected", "Warehouse Manager", None),
+            ("Pending Stock Review", "Reject", "Rejected", "System Manager", None),
             ("Approved", "Mark Issued", "Issued", "Stock Manager", None),
             ("Issued", "Start Work", "In Progress", "Stock User", None),
             ("In Progress", "Complete", "Completed", "Stock User", None),
             ("Approved", "Reject", "Rejected", "Stock Manager", None),
+            ("Approved", "Close Work Order", "Closed", "Stock User", None),
+            ("Approved", "Close Work Order", "Closed", "Warehouse Manager", None),
+            ("Approved", "Close Work Order", "Closed", "Stock Manager", None),
+            ("Approved", "Close Work Order", "Closed", "WMS Engineer", None),
+            ("Approved", "Close Work Order", "Closed", "Employee", None),
+            ("Issued", "Close Work Order", "Closed", "Stock User", None),
+            ("Issued", "Close Work Order", "Closed", "Warehouse Manager", None),
+            ("Issued", "Close Work Order", "Closed", "Stock Manager", None),
+            ("Issued", "Close Work Order", "Closed", "WMS Engineer", None),
+            ("Issued", "Close Work Order", "Closed", "Employee", None),
+            ("In Progress", "Close Work Order", "Closed", "Stock User", None),
+            ("In Progress", "Close Work Order", "Closed", "Warehouse Manager", None),
+            ("In Progress", "Close Work Order", "Closed", "Stock Manager", None),
+            ("In Progress", "Close Work Order", "Closed", "WMS Engineer", None),
+            ("In Progress", "Close Work Order", "Closed", "Employee", None),
         ],
     },
     {
@@ -85,10 +105,13 @@ WORKFLOWS = [
         "transitions": [
             ("Draft", "Submit", "Pending Verification", "Employee", None),
             ("Draft", "Submit", "Pending Verification", "Stock User", None),
-            ("Draft", "Submit", "Consumed", "Stock Manager", None),
-            ("Draft", "Submit", "Consumed", "Warehouse Manager", None),
+            ("Draft", "Submit", "Pending Verification", "WMS Engineer", None),
+            ("Draft", "Submit", "Pending Verification", "Stock Manager", None),
+            ("Draft", "Submit", "Pending Verification", "Warehouse Manager", None),
+            ("Draft", "Submit", "Pending Verification", "System Manager", None),
             ("Pending Verification", "Approve", "Consumed", "Stock Manager", None),
             ("Pending Verification", "Approve", "Consumed", "Warehouse Manager", None),
+            ("Pending Verification", "Approve", "Consumed", "System Manager", None),
             ("Pending Verification", "Reject", "Rejected", "Stock Manager", None),
             ("Pending Verification", "Reject", "Rejected", "Warehouse Manager", None),
             ("Consumed", "Cancel", "Cancelled", "Stock Manager", None),
@@ -232,6 +255,19 @@ def ensure_workflows():
                 valid_transitions.append(row)
             doc.set("transitions", valid_transitions)
 
+        if definition["document_type"] == "WMS Material Consumption":
+            valid_transitions = []
+            for row in doc.transitions:
+                # Two-step consume: never jump Draft → Consumed (that posted GL too early).
+                if (
+                    row.state == "Draft"
+                    and row.action == "Submit"
+                    and row.next_state == "Consumed"
+                ):
+                    continue
+                valid_transitions.append(row)
+            doc.set("transitions", valid_transitions)
+
         for state, action, next_state, allowed, condition in definition["transitions"]:
             exists = False
             target_condition = _condition_key(condition)
@@ -252,7 +288,7 @@ def ensure_workflows():
                     definition["document_type"] == "WMS Material Consumption"
                     and state == "Draft"
                     and action == "Submit"
-                    and next_state in ["Pending Verification", "Consumed"]
+                    and next_state == "Pending Verification"
                 )
                 or (
                     definition["document_type"] == "SNWO Material Transaction"

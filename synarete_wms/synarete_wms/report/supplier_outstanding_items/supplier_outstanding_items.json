@@ -1,0 +1,38 @@
+{
+  "add_total_row": 1,
+  "filters": [
+    {
+      "fieldname": "supplier",
+      "fieldtype": "Link",
+      "label": "Supplier",
+      "options": "Supplier"
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "label": "Item",
+      "options": "Item"
+    }
+  ],
+  "module": "Synarete WMS",
+  "name": "Supplier Outstanding Items",
+  "ref_doctype": "Purchase Order",
+  "report_name": "Supplier Outstanding Items",
+  "report_type": "Script Report",
+  "roles": [
+    {
+      "role": "Stock Manager"
+    },
+    {
+      "role": "Warehouse Manager"
+    },
+    {
+      "role": "WMS Viewer"
+    },
+    {
+      "role": "System Manager"
+    }
+  ],
+  "doctype": "Report",
+  "is_standard": "Yes"
+}

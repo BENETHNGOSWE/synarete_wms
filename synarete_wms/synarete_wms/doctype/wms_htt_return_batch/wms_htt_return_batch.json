@@ -1,0 +1,124 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:HTTRB-{YYYY}-{#####}",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "customer",
+    "return_date",
+    "returned_by",
+    "delivery_reference",
+    "items_section",
+    "items",
+    "notes",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Client",
+      "options": "Customer",
+      "reqd": 1
+    },
+    {
+      "default": "Today",
+      "fieldname": "return_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Returned to Client On",
+      "reqd": 1
+    },
+    {
+      "default": "__user",
+      "fieldname": "returned_by",
+      "fieldtype": "Link",
+      "label": "Recorded By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "delivery_reference",
+      "fieldtype": "Data",
+      "label": "Delivery / Acknowledgment Reference"
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Bulk HTT Return Items"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items Returned to Client",
+      "options": "WMS HTT Return Batch Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "options": "WMS HTT Return Batch",
+      "print_hide": 1,
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 1,
+  "istable": 0,
+  "module": "Synarete WMS",
+  "name": "WMS HTT Return Batch",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "amend": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Warehouse Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "Stock Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "submit": 1,
+      "cancel": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1
+    },
+    {
+      "role": "WMS Viewer",
+      "read": 1,
+      "report": 1,
+      "export": 1
+    }
+  ],
+  "sort_field": "return_date",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

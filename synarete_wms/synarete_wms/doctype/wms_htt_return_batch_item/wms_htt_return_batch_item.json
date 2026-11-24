@@ -1,0 +1,86 @@
+{
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "material_issue",
+    "work_order",
+    "servicenow_work_order",
+    "item_code",
+    "item_name",
+    "condition",
+    "returned_qty",
+    "uom",
+    "serial_no"
+  ],
+  "fields": [
+    {
+      "fieldname": "material_issue",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "HTT Material Issue",
+      "options": "WMS Material Issue",
+      "reqd": 1
+    },
+    {
+      "fieldname": "work_order",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Work Order",
+      "options": "Site Work Order",
+      "read_only": 1
+    },
+    {
+      "fieldname": "servicenow_work_order",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "ServiceNow Work Order",
+      "options": "ServiceNow Site Work Order",
+      "read_only": 1
+    },
+    {
+      "fieldname": "item_code",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "condition",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Returned Condition",
+      "options": "Used\nFaulty",
+      "reqd": 1
+    },
+    {
+      "fieldname": "returned_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity Returned to Client",
+      "reqd": 1
+    },
+    {
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM",
+      "read_only": 1
+    },
+    {
+      "fieldname": "serial_no",
+      "fieldtype": "Small Text",
+      "label": "Serial No"
+    }
+  ],
+  "istable": 1,
+  "module": "Synarete WMS",
+  "name": "WMS HTT Return Batch Item"
+}

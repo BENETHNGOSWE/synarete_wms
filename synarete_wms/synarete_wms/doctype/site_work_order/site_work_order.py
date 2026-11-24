@@ -15,6 +15,16 @@ class SiteWorkOrder(Document):
             self.status = "Draft"
 
     def validate(self):
+        if not self.engineer:
+            frappe.throw(
+                "Assign an Engineer so they can see this job when they log in."
+            )
+
+        self.engineer_name = (
+            frappe.db.get_value("Employee", self.engineer, "employee_name")
+            or self.engineer
+        )
+
         if not self.materials:
             frappe.throw("Add at least one required material.")
 

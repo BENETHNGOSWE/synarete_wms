@@ -37,6 +37,30 @@ def _is_manager(user=None):
     return bool(_roles(user) & MANAGER_ROLES)
 
 
+def allow_self_approve(user=None):
+    """System Manager always can. Others follow WMS Settings (default No)."""
+    if "System Manager" in _roles(user):
+        return True
+    try:
+        return cint(frappe.db.get_single_value("WMS Settings", "allow_self_approve"))
+    except Exception:
+        return 0
+
+
+def assert_can_approve_site_work_order(doc, user=None):
+    """Block the creator from Approving unless Allow Self-Approve is on."""
+    user = user or frappe.session.user
+    if allow_self_approve(user):
+        return
+    owner = getattr(doc, "owner", None)
+    if owner and owner == user:
+        frappe.throw(
+            "You created this Site Work Order, so you cannot Approve it. "
+            "Ask another Warehouse Manager or Stock Manager to Approve. "
+            "To allow one person to do every step, tick Allow Self-Approve in WMS Settings."
+        )
+
+
 def can_issue_snwo_material(user=None):
     """Warehouse Manager / Stock Manager / System Manager may issue stock."""
     return bool(_roles(user) & ISSUE_ROLES)

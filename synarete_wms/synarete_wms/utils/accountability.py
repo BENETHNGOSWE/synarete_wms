@@ -337,7 +337,12 @@ def reverse_for_material_issue(issue):
         )
 
 
-def add_consumption(accountability, quantity, consumption_name):
+def add_consumption(
+    accountability,
+    quantity,
+    consumption_name,
+    consumption_doctype="WMS Material Consumption",
+):
     quantity = flt(quantity)
     available = flt(accountability.outstanding_qty)
     if quantity <= 0:
@@ -349,7 +354,10 @@ def add_consumption(accountability, quantity, consumption_name):
         )
 
     accountability.consumed_qty = flt(accountability.consumed_qty) + quantity
-    accountability.last_consumption = consumption_name
+    if consumption_doctype == "WMS Material Closeout":
+        accountability.last_closeout = consumption_name
+    else:
+        accountability.last_consumption = consumption_name
     refresh_accountability(accountability)
     accountability.save(ignore_permissions=True)
 
@@ -364,7 +372,13 @@ def reverse_consumption(accountability, quantity):
     accountability.save(ignore_permissions=True)
 
 
-def add_return(accountability, quantity, return_name):
+def add_return(
+    accountability,
+    quantity,
+    return_name,
+    return_doctype="Material Return Record",
+):
+    """Record a return and keep its link in the matching typed reference field."""
     quantity = flt(quantity)
     available = flt(accountability.outstanding_qty)
     if quantity <= 0:
@@ -376,7 +390,10 @@ def add_return(accountability, quantity, return_name):
         )
 
     accountability.returned_qty = flt(accountability.returned_qty) + quantity
-    accountability.last_return = return_name
+    if return_doctype == "WMS Material Closeout":
+        accountability.last_closeout = return_name
+    else:
+        accountability.last_return = return_name
     refresh_accountability(accountability)
     accountability.save(ignore_permissions=True)
 

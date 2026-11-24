@@ -8,6 +8,7 @@ function snwo_can_issue() {
 frappe.ui.form.on("SNWO Material Transaction", {
     refresh(frm) {
         set_interchange_flags(frm);
+        set_reconcile_intro(frm);
         if (!snwo_can_issue() && frm.doc.docstatus === 0) {
             frm.set_df_property("transaction_type", "options", "Request\nConsume\nReconcile");
         }
@@ -60,6 +61,7 @@ frappe.ui.form.on("SNWO Material Transaction", {
     },
 
     transaction_type(frm) {
+        set_reconcile_intro(frm);
         if (frm.doc.transaction_type === "MP Issue") {
             frm.set_value("is_mp_stock", 1);
             if (!frm.doc.warehouse) {
@@ -159,6 +161,8 @@ function load_work_order_items(frm) {
                 qty = flt(source.qty_remaining);
             } else if (frm.doc.transaction_type === "MP Issue") {
                 qty = Math.max(0, flt(source.qty_requested) - flt(source.qty_issued));
+            } else if (frm.doc.transaction_type === "Reconcile") {
+                qty = flt(source.qty_remaining);
             } else {
                 qty = flt(source.qty_requested);
             }
@@ -176,4 +180,17 @@ function load_work_order_items(frm) {
         });
         frm.refresh_field("items");
     });
+}
+
+function set_reconcile_intro(frm) {
+    if (frm.doc.transaction_type === "Reconcile") {
+        frm.set_intro(
+            __(
+                "Reconcile only the issued quantity that remains unused after consumption. Use Consume for material already used. This action does not replace Return Material closeout."
+            ),
+            "orange"
+        );
+    } else {
+        frm.set_intro();
+    }
 }

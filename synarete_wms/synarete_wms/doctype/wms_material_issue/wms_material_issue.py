@@ -11,6 +11,9 @@ from synarete_wms.synarete_wms.utils.stock import (
     cancel_linked_stock_entry,
     create_material_transfer,
 )
+from synarete_wms.synarete_wms.utils.qty_rules import (
+    site_work_order_issue_status_error,
+)
 from synarete_wms.synarete_wms.utils.htt import (
     cancel_htt_dispatch_transactions,
     create_htt_dispatch_transactions,
@@ -30,8 +33,29 @@ class WMSMaterialIssue(Document):
         if not self.items:
             frappe.throw("Add at least one item to issue.")
 
-        if self.material_type == "MP" and not self.site_work_order:
+        if self.material_type in ("MP", "Both") and not self.site_work_order:
             frappe.throw("Site Work Order is required for MP material issues.")
+        if self.site_work_order and self.servicenow_work_order:
+            frappe.throw(
+                "Link an HTT material issue to either a Site Work Order or a ServiceNow Work Order, not both."
+            )
+        if self.servicenow_work_order:
+            if self.material_type != "HTT":
+                frappe.throw(
+                    "ServiceNow Work Order tracking is available for HTT-only material issues."
+                )
+            snwo = frappe.get_doc(
+                "ServiceNow Site Work Order", self.servicenow_work_order
+            )
+            if self.site and self.site != snwo.site:
+                frappe.throw("Site must match the selected ServiceNow Work Order.")
+            self.site = snwo.site
+            if self.engineer and snwo.assigned_to and self.engineer != snwo.assigned_to:
+                frappe.throw(
+                    "Engineer must match the selected ServiceNow Work Order."
+                )
+            if not self.engineer:
+                self.engineer = snwo.assigned_to
 
         self._prevent_duplicate_mp_issue()
 
@@ -46,10 +70,24 @@ class WMSMaterialIssue(Document):
                 self.htt_receipt,
                 "receipt_type",
             )
+            if self.servicenow_work_order:
+                receipt_site = frappe.db.get_value(
+                    "HTT Material Receipt",
+                    self.htt_receipt,
+                    "target_site",
+                )
+                if receipt_site and receipt_site != self.site:
+                    frappe.throw(
+                        "HTT Material Receipt site must match the ServiceNow Work Order site."
+                    )
 
-            if receipt_type == "Engineer Request" and not self.site_work_order:
+            if (
+                receipt_type == "Engineer Request"
+                and not self.site_work_order
+                and not self.servicenow_work_order
+            ):
                 frappe.throw(
-                    "Site Work Order is required for HTT Engineer Request issues."
+                    "Select the related Site or ServiceNow Work Order for an HTT Engineer Request."
                 )
 
         work_order_items = []
@@ -87,6 +125,10 @@ class WMSMaterialIssue(Document):
                     item.uom = matched_work_order_item.uom
 
             item_type = item.material_type or self.material_type
+            if item_type == "Both":
+                frappe.throw(
+                    f"Select MP or HTT on each item when the issue contains Both types: {item.item_code}."
+                )
             if item_type not in ("MP", "HTT"):
                 frappe.throw(
                     f"Select MP or HTT for {item.item_code} on the issue item row."
@@ -200,6 +242,23 @@ class WMSMaterialIssue(Document):
             if self.source_warehouse == self.target_warehouse:
                 frappe.throw("Source and target warehouses must be different.")
 
+    def before_submit(self):
+        """Keep approval on the Site Work Order ahead of MP stock movement."""
+        if not self.site_work_order or (self.material_type or "") not in ("MP", "Both"):
+            return
+
+        has_mp_item = any(
+            (item.material_type or self.material_type) == "MP"
+            for item in self.items or []
+        )
+        if not has_mp_item:
+            return
+
+        work_order = frappe.get_doc("Site Work Order", self.site_work_order)
+        error = site_work_order_issue_status_error(work_order.status)
+        if error:
+            frappe.throw(f"{self.site_work_order}: {error}")
+
     def _prevent_duplicate_mp_issue(self):
         if not self.site_work_order:
             return
@@ -301,6 +360,17 @@ class WMSMaterialIssue(Document):
                 self.name,
                 update_modified=True,
             )
+            wo_status = frappe.db.get_value(
+                "Site Work Order", self.site_work_order, "status"
+            )
+            if wo_status == "Approved":
+                frappe.db.set_value(
+                    "Site Work Order",
+                    self.site_work_order,
+                    "status",
+                    "Issued",
+                    update_modified=True,
+                )
 
         self.db_set("status", "Issued")
 

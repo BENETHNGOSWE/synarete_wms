@@ -141,6 +141,18 @@ class WMSMaterialConsumption(Document):
                     f"cannot consume {qty}. Reconcile physical stock before expensing."
                 )
 
+    def _require_expense_accounts(self):
+        missing = []
+        for item in self.items:
+            if not item.expense_account:
+                missing.append(item.item_code)
+        if missing:
+            frappe.throw(
+                "Warehouse must choose an Expense Account for: "
+                + ", ".join(missing)
+                + ". Stock is not deducted until Approve."
+            )
+
     def on_submit(self):
         if self.stock_entry:
             return
@@ -159,6 +171,8 @@ class WMSMaterialConsumption(Document):
             f" / Work Order {issue.site_work_order or ''}"
         )
 
+        self._require_expense_accounts()
+
         stock_entry = create_material_issue(
             items=[
                 {
@@ -166,6 +180,7 @@ class WMSMaterialConsumption(Document):
                     "qty": item.qty,
                     "uom": item.uom,
                     "serial_no": item.serial_no,
+                    "expense_account": item.expense_account,
                 }
                 for item in self.items
             ],
